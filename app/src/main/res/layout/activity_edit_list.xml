@@ -8,8 +8,6 @@
 
     <!-- TODO ListView for the current list -->
 
-    <!-- This is a test  1 -->
-
     <!-- EditText and ImageButton to update the list -->
     <LinearLayout
         android:layout_width="fill_parent"
