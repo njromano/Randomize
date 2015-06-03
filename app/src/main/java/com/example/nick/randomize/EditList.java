@@ -24,7 +24,9 @@ public class EditList extends ActionBarActivity {
         // fetch intent from MainActivity
         Intent intent = getIntent();
         String chosenItem = intent.getStringExtra(MainActivity.EXTRA_CHOSEN);
-
+        if (chosenItem == "NEW") {
+            // TODO add layout for new list
+        }
 
         // test array TODO load this from intent and storage
         String[] editArray = new String[]{"edit0", "edit1", "edit2", "edit3", "edit4", "edit5", "edit6",

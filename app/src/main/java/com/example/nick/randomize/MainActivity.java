@@ -11,6 +11,9 @@ import android.widget.ArrayAdapter;
 import android.widget.ListView;
 import android.widget.Toast;
 
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.IOException;
 import java.util.ArrayList;
 
 
@@ -23,19 +26,24 @@ public class MainActivity extends ActionBarActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        // test array of list items TODO make this or ArrayList load from storage
-        String[] array = new String[]{"test0", "test1", "test2", "test3", "test4", "test5", "test6",
-                "test7", "test8", "test9", "test10", "test11", "test12"};
+        List list1 = new List("List 1 Title");
+        List list2 = new List("List 2 Title");
+        ArrayList<List> arrayList = new ArrayList<List>();
+        arrayList.add(list1);
+        arrayList.add(list2);
 
-        // set up ListView to display the list items, along with ArrayList
+
+        // test array of list items TODO make this or ArrayList load from storage
+        //String[] array = new String[]{"test0", "test1", "test2", "test3", "test4", "test5", "test6",
+        //        "test7", "test8", "test9", "test10", "test11", "test12"};
+
+        //ArrayList<List> arrayList = List.loadData(this);
+
+        // set up ListView to display the list items
         ListView listView = (ListView) findViewById(R.id.listview);
-        ArrayList<String> list = new ArrayList<String>();
-        for (int i = 0; i < array.length; i++) {
-            list.add(array[i]);
-        }
 
         // set up ArrayAdapter to capture the array
-        ArrayAdapter adapter = new ArrayAdapter(this, android.R.layout.simple_list_item_1, list);
+        ArrayAdapter adapter = new ArrayAdapter(this, android.R.layout.simple_list_item_1, arrayList);
         listView.setAdapter(adapter);
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
@@ -66,9 +74,12 @@ public class MainActivity extends ActionBarActivity {
         //noinspection SimplifiableIfStatement
         if (id == R.id.action_settings) {
             return true;
+        } else if (id == R.id.action_new) {
+            Intent intent = new Intent(getApplicationContext(), EditList.class);
+            String chosen = "NEW";
+            intent.putExtra(EXTRA_CHOSEN, chosen);
+            startActivity(intent);
         }
-        else if (id == R.id.action_new)
-            setContentView(R.layout.activity_edit_list);
 
 
         return super.onOptionsItemSelected(item);
