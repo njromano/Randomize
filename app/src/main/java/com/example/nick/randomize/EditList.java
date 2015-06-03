@@ -1,5 +1,6 @@
 package com.example.nick.randomize;
 
+import android.app.Activity;
 import android.content.Intent;
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
@@ -8,6 +9,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.Toast;
 
@@ -15,8 +17,9 @@ import java.util.ArrayList;
 
 
 public class EditList extends ActionBarActivity {
-
+    public final static String EXTRA_SAVED = "com.example.nick.Randomize.SAVED";
     private List chosenList;
+    private ArrayAdapter editAdapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -36,7 +39,7 @@ public class EditList extends ActionBarActivity {
         ListView listView = (ListView) findViewById(R.id.listeditview);
 
         // set up ArrayAdapter to capture the array
-        ArrayAdapter editAdapter = new ArrayAdapter(this, android.R.layout.simple_list_item_1, editList);
+        editAdapter = new ArrayAdapter(this, android.R.layout.simple_list_item_1, editList);
         listView.setAdapter(editAdapter);
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
@@ -68,11 +71,23 @@ public class EditList extends ActionBarActivity {
         {
             return true;
         }
-        else if (id == R.id.action_edit_title)
+        else if (id == R.id.action_save)
         {
-            // TODO open title edit dialog
+            Intent intent = new Intent(getApplicationContext(),MainActivity.class);
+            intent.putExtra(EXTRA_SAVED, chosenList);
+            startActivity(intent);
         }
 
         return super.onOptionsItemSelected(item);
+    }
+
+    // respond to new item saved
+    public void addItem(View view)
+    {
+        EditText newItem = (EditText) findViewById(R.id.newitemtext);
+        chosenList.addItem(newItem.getText().toString());
+        ListView listView = (ListView) findViewById(R.id.listeditview);
+        editAdapter.notifyDataSetChanged();
+        newItem.setText("");
     }
 }

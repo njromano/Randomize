@@ -20,6 +20,8 @@ import java.util.ArrayList;
 public class MainActivity extends ActionBarActivity {
 
     public final static String EXTRA_CHOSEN = "com.example.nick.Randomize.CHOSEN";
+    public final static String EXTRA_SAVED = "com.example.nick.Randomize.SAVED";
+    public ArrayList<List> arrayList;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -39,12 +41,18 @@ public class MainActivity extends ActionBarActivity {
 
         List list1 = new List("List 1 Title", testItems1);
         List list2 = new List("List 2 Title", testItems2);
-        final ArrayList<List> arrayList = new ArrayList<List>();
+        arrayList = new ArrayList<List>();
+        // grab saved List if applicable
+        Intent intent = getIntent();
+        if(intent.hasExtra(EXTRA_SAVED))
+        {
+            arrayList.add((List) intent.getParcelableExtra(EXTRA_SAVED));
+        }
         arrayList.add(list1);
         arrayList.add(list2);
         // end test initialization
 
-        // TODO make ArrayList load from storage
+        // TODO make ArrayList load from storage (and probably stop instantiating things here)
         //ArrayList<List> arrayList = List.loadData(this);
 
         // set up ListView to display the list items

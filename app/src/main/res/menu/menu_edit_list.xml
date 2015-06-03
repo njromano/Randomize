@@ -4,8 +4,8 @@
     xmlns:randomize="http://schemas.android.com/apk/res-auto"
     tools:context="com.example.nick.randomize.EditList">
 
-    <item android:id="@+id/action_edit_title"
-        android:icon="@drawable/ic_action_edit"
+    <item android:id="@+id/action_save"
+        android:icon="@drawable/ic_action_accept"
         android:title="Edit Title"
         randomize:showAsAction="ifRoom"
         />

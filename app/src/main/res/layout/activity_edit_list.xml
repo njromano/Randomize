@@ -11,9 +11,32 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"></ListView>
 
-    <!-- TODO set up list editing interface -->
+    <!-- TODO set up list editing interface, possibly change to Fragments -->
     <!-- edit title -->
-    <!-- add item -->
 
+    <!-- add item -->
+    <LinearLayout
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:orientation="horizontal">
+
+        <EditText
+            android:id="@+id/newitemtext"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:layout_below="@id/listeditview"
+            android:hint="@string/new_item_hint" />
+
+        <Button
+            android:id="@+id/newitemsave"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="0"
+            android:text="@string/new_item_save"
+            android:onClick="addItem"/>
+
+    </LinearLayout>
 
 </RelativeLayout>
