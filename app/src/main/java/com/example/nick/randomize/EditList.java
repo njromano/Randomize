@@ -23,21 +23,28 @@ public class EditList extends ActionBarActivity {
 
         // fetch intent from MainActivity
         Intent intent = getIntent();
-        String chosenItem = intent.getStringExtra(MainActivity.EXTRA_CHOSEN);
-        if (chosenItem == "NEW") {
-            // TODO add layout for new list
-        }
+        List chosenList = (List) intent.getParcelableExtra(MainActivity.EXTRA_CHOSEN);
+
+        // set activity title
+        setTitle(chosenList.title);
+
 
         // test array TODO load this from intent and storage
+        /*
         String[] editArray = new String[]{"edit0", "edit1", "edit2", "edit3", "edit4", "edit5", "edit6",
                 "edit7", "edit8", "edit9", "edit10", "edit11", "edit12"};
 
         // set up list array
-        ListView listView = (ListView) findViewById(R.id.listeditview);
         ArrayList<String> editList = new ArrayList<String>();
         for (int i = 0; i < editArray.length; i++) {
             editList.add(editArray[i] + " " + chosenItem);
         }
+        */
+
+        ArrayList<String> editList = new ArrayList<String>();
+        editList = chosenList.listItems;
+
+        ListView listView = (ListView) findViewById(R.id.listeditview);
 
         // set up ArrayAdapter to capture the array
         ArrayAdapter editAdapter = new ArrayAdapter(this, android.R.layout.simple_list_item_1, editList);

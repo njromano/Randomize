@@ -1,6 +1,9 @@
 package com.example.nick.randomize;
 
 import android.content.Context;
+import android.os.Bundle;
+import android.os.Parcel;
+import android.os.Parcelable;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -16,12 +19,14 @@ import java.util.Random;
 /**
  * Created by Nick on 6/2/2015.
  */
-public class List {
+public class List implements Parcelable {
     // title of list
     public String title;
     // items in list
-    private ArrayList<String> listItems;
-    // location of list's file
+    public ArrayList<String> listItems;
+    // keys for above variables for Bundle
+    private static final String KEY_TITLE = "title";
+    private static final String KEY_LIST_ITEMS = "listItems";
     // random number generator for randomizing functions
     private Random listRand;
     private static File location;
@@ -30,10 +35,51 @@ public class List {
     public List(String titleIn) {
         this.title = titleIn;
         this.listRand = new Random(System.currentTimeMillis());
-        this.listItems = null;
-        location = null;
+        this.listItems = new ArrayList<String>();
+        this.location = null;
     }
 
+    public List(String titleIn, ArrayList<String> itemsIn)
+    {
+        this.title = titleIn;
+        this.listItems = itemsIn;
+        this.location = null;
+    }
+
+    // Parcelable implementations
+    @Override
+    public int describeContents()
+    {
+        return 0;
+    }
+
+    @Override
+    public void writeToParcel(Parcel out, int flags)
+    {
+        Bundle bundle = new Bundle();
+
+        bundle.putString(KEY_TITLE, title);
+        bundle.putStringArrayList(KEY_LIST_ITEMS, listItems);
+
+        out.writeBundle(bundle);
+    }
+
+    public static final Parcelable.Creator<List> CREATOR = new Creator<List>() {
+        @Override
+        public List createFromParcel(Parcel source) {
+            // read bundle
+            Bundle bundle = source.readBundle();
+
+            // instantiate List
+            return new List(bundle.getString(KEY_TITLE),bundle.getStringArrayList(KEY_LIST_ITEMS));
+        }
+
+        @Override
+    public List[] newArray(int size)
+        {
+            return new List[size];
+        }
+    };
 
     // toString override for ListView
     @Override

@@ -26,9 +26,19 @@ public class MainActivity extends ActionBarActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        List list1 = new List("List 1 Title");
-        List list2 = new List("List 2 Title");
-        ArrayList<List> arrayList = new ArrayList<List>();
+        ArrayList<String> testItems1 = new ArrayList<String>();
+        testItems1.add("List item 1");
+        testItems1.add("List item 2");
+        testItems1.add("List item 3");
+
+        ArrayList<String> testItems2 = new ArrayList<String>();
+        testItems2.add("List item 1");
+        testItems2.add("List item 2");
+        testItems2.add("List item 3");
+
+        List list1 = new List("List 1 Title", testItems1);
+        List list2 = new List("List 2 Title", testItems2);
+        final ArrayList<List> arrayList = new ArrayList<List>();
         arrayList.add(list1);
         arrayList.add(list2);
 
@@ -50,7 +60,7 @@ public class MainActivity extends ActionBarActivity {
             public void onItemClick(AdapterView<?> parent, final View view,
                                     int position, long id) {
                 Intent intent = new Intent(getApplicationContext(), EditList.class);
-                String chosen = Integer.toString(position);
+                List chosen = arrayList.get(position);
                 intent.putExtra(EXTRA_CHOSEN, chosen);
                 startActivity(intent);
             }
@@ -76,7 +86,7 @@ public class MainActivity extends ActionBarActivity {
             return true;
         } else if (id == R.id.action_new) {
             Intent intent = new Intent(getApplicationContext(), EditList.class);
-            String chosen = "NEW";
+            List chosen = new List("New List");
             intent.putExtra(EXTRA_CHOSEN, chosen);
             startActivity(intent);
         }
