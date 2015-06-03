@@ -37,18 +37,10 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".newList"
-            android:label="@string/title_activity_new_list"
-            android:parentActivityName=".MainActivity" >
-            <meta-data
-                android:name="android.support.PARENT_ACTIVITY"
-                android:value="com.example.nick.randomize.MainActivity" />
-        </activity>
-        <activity
             android:name=".EditList"
             android:label="@string/title_activity_edit_list"
             android:parentActivityName=".MainActivity"
-            android:screenOrientation="landscape" >
+            android:screenOrientation="sensorPortrait">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="com.example.nick.randomize.MainActivity" />
@@ -59,9 +51,6 @@
                 <category android:name="android.intent.category.LEANBACK_LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".DetailsActivity" />
-        <activity android:name=".PlaybackOverlayActivity" />
-        <activity android:name=".BrowseErrorActivity" />
     </application>
 
 </manifest>
