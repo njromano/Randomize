@@ -26,6 +26,7 @@ public class MainActivity extends ActionBarActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+        // for testing before storage implementation
         ArrayList<String> testItems1 = new ArrayList<String>();
         testItems1.add("List item 1");
         testItems1.add("List item 2");
@@ -41,12 +42,9 @@ public class MainActivity extends ActionBarActivity {
         final ArrayList<List> arrayList = new ArrayList<List>();
         arrayList.add(list1);
         arrayList.add(list2);
+        // end test initialization
 
-
-        // test array of list items TODO make this or ArrayList load from storage
-        //String[] array = new String[]{"test0", "test1", "test2", "test3", "test4", "test5", "test6",
-        //        "test7", "test8", "test9", "test10", "test11", "test12"};
-
+        // TODO make ArrayList load from storage
         //ArrayList<List> arrayList = List.loadData(this);
 
         // set up ListView to display the list items

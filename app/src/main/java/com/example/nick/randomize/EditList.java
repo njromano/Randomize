@@ -16,6 +16,8 @@ import java.util.ArrayList;
 
 public class EditList extends ActionBarActivity {
 
+    private List chosenList;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -23,23 +25,10 @@ public class EditList extends ActionBarActivity {
 
         // fetch intent from MainActivity
         Intent intent = getIntent();
-        List chosenList = (List) intent.getParcelableExtra(MainActivity.EXTRA_CHOSEN);
+        chosenList = (List) intent.getParcelableExtra(MainActivity.EXTRA_CHOSEN);
 
         // set activity title
         setTitle(chosenList.title);
-
-
-        // test array TODO load this from intent and storage
-        /*
-        String[] editArray = new String[]{"edit0", "edit1", "edit2", "edit3", "edit4", "edit5", "edit6",
-                "edit7", "edit8", "edit9", "edit10", "edit11", "edit12"};
-
-        // set up list array
-        ArrayList<String> editList = new ArrayList<String>();
-        for (int i = 0; i < editArray.length; i++) {
-            editList.add(editArray[i] + " " + chosenItem);
-        }
-        */
 
         ArrayList<String> editList = new ArrayList<String>();
         editList = chosenList.listItems;
@@ -75,8 +64,13 @@ public class EditList extends ActionBarActivity {
         int id = item.getItemId();
 
         //noinspection SimplifiableIfStatement
-        if (id == R.id.action_settings) {
+        if (id == R.id.action_settings)
+        {
             return true;
+        }
+        else if (id == R.id.action_edit_title)
+        {
+            // TODO open title edit dialog
         }
 
         return super.onOptionsItemSelected(item);
