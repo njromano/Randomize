@@ -9,13 +9,18 @@
     <ListView xmlns:android="http://schemas.android.com/apk/res/android"
         android:id="@+id/listeditview"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"></ListView>
+        android:layout_height="wrap_content"
+        android:layout_alignParentTop="true"
+        android:layout_above="@+id/newitem"
+        android:transcriptMode="alwaysScroll"
+        android:stackFromBottom="false" />
 
     <!-- TODO set up list editing interface, possibly change to Fragments -->
     <!-- edit title -->
 
     <!-- add item -->
     <LinearLayout
+        android:id="@+id/newitem"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
@@ -23,10 +28,9 @@
 
         <EditText
             android:id="@+id/newitemtext"
-            android:layout_width="0dp"
+            android:layout_width="fill_parent"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:layout_below="@id/listeditview"
             android:hint="@string/new_item_hint" />
 
         <Button

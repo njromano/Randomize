@@ -2,14 +2,8 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.example.nick.randomize" >
 
-    <uses-sdk android:minSdkVersion="11" />
-
-    <android:uses-permission
-        android:name="android.permission.WRITE_EXTERNAL_STORAGE"
-        android:maxSdkVersion="18" />
-    <android:uses-permission android:name="android.permission.READ_PHONE_STATE" />
-    <android:uses-permission
-        android:name="android.permission.READ_EXTERNAL_STORAGE"
+    <uses-sdk
+        android:minSdkVersion="11"
         android:maxSdkVersion="18" />
 
     <uses-permission android:name="android.permission.INTERNET" />
@@ -40,7 +34,8 @@
             android:name=".EditList"
             android:label="@string/title_activity_edit_list"
             android:parentActivityName=".MainActivity"
-            android:screenOrientation="sensorPortrait">
+            android:screenOrientation="sensorPortrait"
+            android:windowSoftInputMode="adjustResize">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="com.example.nick.randomize.MainActivity" />
