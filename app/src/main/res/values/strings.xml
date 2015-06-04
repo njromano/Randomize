@@ -6,6 +6,9 @@
     <string name="title_activity_new_list">newList</string>
     <string name="accept_new_list">Accept</string>
     <string name="title_activity_edit_list">Edit List Items</string>
+    <string name="edit_title_text">Title Name</string>
+    <string name="save_title">Save Title</string>
+    <string name="cancel">Cancel</string>
     <string name="new_item_hint">New item...</string>
     <string name="new_item_save">Add</string>
     <string name="title_activity_randomize">Randomize</string>

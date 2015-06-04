@@ -15,8 +15,6 @@
         android:transcriptMode="alwaysScroll"
         android:stackFromBottom="false" />
 
-    <!-- TODO set up list editing interface, possibly change to Fragments -->
-    <!-- edit title -->
 
     <!-- add item -->
     <LinearLayout
