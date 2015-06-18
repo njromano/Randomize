@@ -5,6 +5,7 @@ import android.app.AlertDialog;
 import android.app.DialogFragment;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.os.Parcelable;
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
 import android.view.Menu;
@@ -77,7 +78,7 @@ public class EditList extends ActionBarActivity {
         else if (id == R.id.action_save)
         {
             Intent intent = new Intent(getApplicationContext(),MainActivity.class);
-            intent.putExtra(EXTRA_SAVED, chosenList);
+            intent.putExtra(EXTRA_SAVED, (Parcelable) chosenList);
             startActivity(intent);
         } else if (id == R.id.action_edit_title) {
             showEditTitleDialog();

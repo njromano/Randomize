@@ -13,13 +13,14 @@ import java.io.ObjectInput;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutput;
 import java.io.ObjectOutputStream;
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Random;
 
 /**
  * Created by Nick on 6/2/2015.
  */
-public class List implements Parcelable {
+public class List implements Parcelable, Serializable {
     // title of list
     public String title;
     // items in list
@@ -36,14 +37,14 @@ public class List implements Parcelable {
         this.title = titleIn;
         this.listRand = new Random(System.currentTimeMillis());
         this.listItems = new ArrayList<String>();
-        this.location = null;
+        location = null;
     }
 
     public List(String titleIn, ArrayList<String> itemsIn)
     {
         this.title = titleIn;
         this.listItems = itemsIn;
-        this.location = null;
+        location = null;
     }
 
     // Parcelable implementations
@@ -109,6 +110,21 @@ public class List implements Parcelable {
         listItems.add(item);
     }
 
+    @Override
+    public boolean equals(Object object) {
+        if (object != null && object instanceof List) {
+            List list = (List) object;
+            if (listItems == null) {
+                return (list.listItems == null);
+            } else {
+                return listItems.equals(list.listItems) && title == list.title;
+            }
+        }
+
+        return false;
+    }
+
+    /* commenting out the following to try simpler data storage
     // functions for reading/writing lists from/to storage
     public void saveData(Context context) {
         if (location == null)
@@ -140,4 +156,6 @@ public class List implements Parcelable {
         }
         return loadList;
     }
+
+    */
 }

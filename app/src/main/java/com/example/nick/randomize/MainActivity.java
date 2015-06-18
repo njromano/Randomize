@@ -1,8 +1,11 @@
 package com.example.nick.randomize;
 
+import android.content.Context;
 import android.content.Intent;
+import android.os.Parcelable;
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -13,7 +16,11 @@ import android.widget.Toast;
 
 import java.io.File;
 import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
 import java.util.ArrayList;
 
 
@@ -21,45 +28,22 @@ public class MainActivity extends ActionBarActivity {
 
     public final static String EXTRA_CHOSEN = "com.example.nick.Randomize.CHOSEN";
     public final static String EXTRA_SAVED = "com.example.nick.Randomize.SAVED";
-    public ArrayList<List> arrayList;
+    private ArrayList<List> arrayList;
+    private ArrayAdapter adapter;
+    private ListView listView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        // for testing before storage implementation
-        ArrayList<String> testItems1 = new ArrayList<String>();
-        testItems1.add("List item 1");
-        testItems1.add("List item 2");
-        testItems1.add("List item 3");
-
-        ArrayList<String> testItems2 = new ArrayList<String>();
-        testItems2.add("List item 1");
-        testItems2.add("List item 2");
-        testItems2.add("List item 3");
-
-        List list1 = new List("List 1 Title", testItems1);
-        List list2 = new List("List 2 Title", testItems2);
-        arrayList = new ArrayList<List>();
-        // grab saved List if applicable
-        Intent intent = getIntent();
-        if(intent.hasExtra(EXTRA_SAVED))
-        {
-            arrayList.add((List) intent.getParcelableExtra(EXTRA_SAVED));
-        }
-        arrayList.add(list1);
-        arrayList.add(list2);
-        // end test initialization
-
-        // TODO make ArrayList load from storage (and probably stop instantiating things here)
-        //ArrayList<List> arrayList = List.loadData(this);
+        arrayList = loadLists();
 
         // set up ListView to display the list items
-        ListView listView = (ListView) findViewById(R.id.listview);
+        listView = (ListView) findViewById(R.id.listview);
 
         // set up ArrayAdapter to capture the array
-        ArrayAdapter adapter = new ArrayAdapter(this, android.R.layout.simple_list_item_1, arrayList);
+        adapter = new ArrayAdapter(this, android.R.layout.simple_list_item_1, arrayList);
         listView.setAdapter(adapter);
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
@@ -67,10 +51,41 @@ public class MainActivity extends ActionBarActivity {
                                     int position, long id) {
                 Intent intent = new Intent(getApplicationContext(), EditList.class);
                 List chosen = arrayList.get(position);
-                intent.putExtra(EXTRA_CHOSEN, chosen);
+                intent.putExtra(EXTRA_CHOSEN, (Parcelable) chosen);
                 startActivity(intent);
             }
         });
+    }
+
+    @Override
+    protected void onStart() {
+        super.onStart();
+
+        // grab saved List if applicable
+        Intent intent = getIntent();
+        if (intent.hasExtra(EXTRA_SAVED)) {
+            // grab the List object
+            List grabbedList = intent.getParcelableExtra(EXTRA_SAVED);
+
+            // add it to the list if it's not there
+            arrayList = loadLists();
+            if (!arrayList.contains(grabbedList))
+                arrayList.add((List) intent.getParcelableExtra(EXTRA_SAVED));
+            else {
+                arrayList.set(arrayList.indexOf(grabbedList), grabbedList);
+            }
+
+            // save it
+            saveLists(arrayList);
+        }
+
+        adapter.notifyDataSetChanged();
+    }
+
+    @Override
+    protected void onRestart() {
+        super.onRestart();
+
     }
 
     @Override
@@ -93,11 +108,47 @@ public class MainActivity extends ActionBarActivity {
         } else if (id == R.id.action_new) {
             Intent intent = new Intent(getApplicationContext(), EditList.class);
             List chosen = new List("New List");
-            intent.putExtra(EXTRA_CHOSEN, chosen);
+            intent.putExtra(EXTRA_CHOSEN, (Parcelable) chosen);
             startActivity(intent);
         }
 
 
         return super.onOptionsItemSelected(item);
+    }
+
+    private ArrayList<List> loadLists() {
+        ArrayList<List> lists = new ArrayList<List>();
+        try {
+            File file = new File(this.getFilesDir(), "lists");
+            FileInputStream fis = new FileInputStream(file);
+            ObjectInputStream ois = new ObjectInputStream(fis);
+            lists = (ArrayList<List>) ois.readObject();
+            ois.close();
+        } catch (Exception e) {
+            if (e instanceof FileNotFoundException) {
+                File file = new File(this.getFilesDir(), "lists");
+                try {
+                    file.createNewFile();
+                } catch (IOException e1) {
+                    e1.printStackTrace();
+                }
+
+                Log.i("MainActivity", "Made new 'lists' file\n");
+            } else
+                e.printStackTrace();
+        }
+        return lists;
+    }
+
+    private void saveLists(ArrayList<List> lists) {
+        try {
+            FileOutputStream fos = openFileOutput("lists", Context.MODE_PRIVATE);
+            ObjectOutputStream oos = new ObjectOutputStream(fos);
+            oos.writeObject(lists);
+            oos.close();
+            Log.i("MainActivity", "Lists saved.\n");
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 }
