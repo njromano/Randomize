@@ -27,8 +27,8 @@ import java.util.ArrayList;
 public class MainActivity extends ActionBarActivity {
 
     public final static String EXTRA_CHOSEN = "com.example.nick.Randomize.CHOSEN";
-    public final static String EXTRA_SAVED = "com.example.nick.Randomize.SAVED";
-    private ArrayList<List> arrayList;
+    public final static String EXTRA_LISTS = "com.example.nick.Randomize.LISTS";
+    private ArrayList<RandomizeList> arrayList;
     private ArrayAdapter adapter;
     private ListView listView;
 
@@ -50,8 +50,8 @@ public class MainActivity extends ActionBarActivity {
             public void onItemClick(AdapterView<?> parent, final View view,
                                     int position, long id) {
                 Intent intent = new Intent(getApplicationContext(), EditList.class);
-                List chosen = arrayList.get(position);
-                intent.putExtra(EXTRA_CHOSEN, (Parcelable) chosen);
+                intent.putExtra(EXTRA_CHOSEN, position);
+                intent.putExtra(EXTRA_LISTS, arrayList);
                 startActivity(intent);
             }
         });
@@ -61,19 +61,10 @@ public class MainActivity extends ActionBarActivity {
     protected void onStart() {
         super.onStart();
 
-        // grab saved List if applicable
         Intent intent = getIntent();
-        if (intent.hasExtra(EXTRA_SAVED)) {
+        if (intent.hasExtra(EditList.EXTRA_SAVED)) {
             // grab the List object
-            List grabbedList = intent.getParcelableExtra(EXTRA_SAVED);
-
-            // add it to the list if it's not there
-            arrayList = loadLists();
-            if (!arrayList.contains(grabbedList))
-                arrayList.add((List) intent.getParcelableExtra(EXTRA_SAVED));
-            else {
-                arrayList.set(arrayList.indexOf(grabbedList), grabbedList);
-            }
+            arrayList = intent.getParcelableArrayListExtra(EditList.EXTRA_SAVED);
 
             // save it
             saveLists(arrayList);
@@ -86,6 +77,14 @@ public class MainActivity extends ActionBarActivity {
     protected void onRestart() {
         super.onRestart();
 
+    }
+
+    @Override
+    protected void onStop()
+    {
+        super.onPause();
+
+        adapter.notifyDataSetInvalidated();
     }
 
     @Override
@@ -107,8 +106,10 @@ public class MainActivity extends ActionBarActivity {
             return true;
         } else if (id == R.id.action_new) {
             Intent intent = new Intent(getApplicationContext(), EditList.class);
-            List chosen = new List("New List");
-            intent.putExtra(EXTRA_CHOSEN, (Parcelable) chosen);
+            arrayList = loadLists();
+            arrayList.add(new RandomizeList("New List Title"));
+            intent.putExtra(EXTRA_CHOSEN, arrayList.size() - 1);
+            intent.putParcelableArrayListExtra(EXTRA_LISTS, arrayList);
             startActivity(intent);
         }
 
@@ -116,35 +117,41 @@ public class MainActivity extends ActionBarActivity {
         return super.onOptionsItemSelected(item);
     }
 
-    private ArrayList<List> loadLists() {
-        ArrayList<List> lists = new ArrayList<List>();
+    private ArrayList<RandomizeList> loadLists() {
+        ArrayList<RandomizeList> lists = new ArrayList<RandomizeList>();
+        File file = new File(this.getFilesDir(), "lists");
         try {
-            File file = new File(this.getFilesDir(), "lists");
             FileInputStream fis = new FileInputStream(file);
             ObjectInputStream ois = new ObjectInputStream(fis);
-            lists = (ArrayList<List>) ois.readObject();
+            lists = (ArrayList<RandomizeList>) ois.readObject();
+            if (lists == null)
+                throw new Exception("Null list read from storage");
             ois.close();
         } catch (Exception e) {
             if (e instanceof FileNotFoundException) {
-                File file = new File(this.getFilesDir(), "lists");
-                try {
-                    file.createNewFile();
-                } catch (IOException e1) {
-                    e1.printStackTrace();
-                }
-
+                Log.i("MainActivity", "FileNotFoundException");
+                lists.add(new RandomizeList("New Title"));
+                saveLists(lists);
                 Log.i("MainActivity", "Made new 'lists' file\n");
+                lists = loadLists();
             } else
                 e.printStackTrace();
         }
+
         return lists;
     }
 
-    private void saveLists(ArrayList<List> lists) {
+    private void saveLists(ArrayList<RandomizeList> lists) {
         try {
             FileOutputStream fos = openFileOutput("lists", Context.MODE_PRIVATE);
             ObjectOutputStream oos = new ObjectOutputStream(fos);
+            if(lists == null)
+            {
+                lists = new ArrayList<>();
+            }
+
             oos.writeObject(lists);
+
             oos.close();
             Log.i("MainActivity", "Lists saved.\n");
         } catch (Exception e) {

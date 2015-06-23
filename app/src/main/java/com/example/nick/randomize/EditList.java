@@ -22,8 +22,11 @@ import java.util.ArrayList;
 
 public class EditList extends ActionBarActivity {
     public final static String EXTRA_SAVED = "com.example.nick.Randomize.SAVED";
-    private List chosenList;
+    private ArrayList<RandomizeList> arrayList;
+    private RandomizeList chosenList;
+    private int chosenIndex;
     private ArrayAdapter editAdapter;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -31,8 +34,20 @@ public class EditList extends ActionBarActivity {
         setContentView(R.layout.activity_edit_list);
 
         // fetch intent from MainActivity
-        Intent intent = getIntent();
-        chosenList = intent.getParcelableExtra(MainActivity.EXTRA_CHOSEN);
+        try {
+            Intent intent = getIntent();
+            arrayList = intent.getParcelableArrayListExtra(MainActivity.EXTRA_LISTS);
+            chosenIndex = intent.getIntExtra(MainActivity.EXTRA_CHOSEN, 0);
+            if (arrayList != null) {
+                chosenList = arrayList.get(chosenIndex);
+            } else {
+                throw new Exception("Null list array passed to EditList");
+            }
+        }
+        catch (Exception e)
+        {
+            e.printStackTrace();
+        }
 
         // set activity title
         setTitle(chosenList.title);
@@ -78,7 +93,8 @@ public class EditList extends ActionBarActivity {
         else if (id == R.id.action_save)
         {
             Intent intent = new Intent(getApplicationContext(),MainActivity.class);
-            intent.putExtra(EXTRA_SAVED, (Parcelable) chosenList);
+            arrayList.set(chosenIndex, chosenList);
+            intent.putParcelableArrayListExtra(EXTRA_SAVED, arrayList);
             startActivity(intent);
         } else if (id == R.id.action_edit_title) {
             showEditTitleDialog();

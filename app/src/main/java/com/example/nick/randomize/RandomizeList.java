@@ -20,7 +20,7 @@ import java.util.Random;
 /**
  * Created by Nick on 6/2/2015.
  */
-public class List implements Parcelable, Serializable {
+public class RandomizeList implements Parcelable, Serializable {
     // title of list
     public String title;
     // items in list
@@ -33,18 +33,24 @@ public class List implements Parcelable, Serializable {
     private static File location;
 
     // Constructor
-    public List(String titleIn) {
+    public RandomizeList(String titleIn) {
         this.title = titleIn;
         this.listRand = new Random(System.currentTimeMillis());
         this.listItems = new ArrayList<String>();
         location = null;
     }
 
-    public List(String titleIn, ArrayList<String> itemsIn)
+    public RandomizeList(String titleIn, ArrayList<String> itemsIn)
     {
         this.title = titleIn;
         this.listItems = itemsIn;
         location = null;
+    }
+
+    public RandomizeList(Parcel parcel)
+    {
+        this.title = parcel.readString();
+        this.listItems = parcel.readArrayList(null);
     }
 
     // Parcelable implementations
@@ -57,28 +63,20 @@ public class List implements Parcelable, Serializable {
     @Override
     public void writeToParcel(Parcel out, int flags)
     {
-        Bundle bundle = new Bundle();
-
-        bundle.putString(KEY_TITLE, title);
-        bundle.putStringArrayList(KEY_LIST_ITEMS, listItems);
-
-        out.writeBundle(bundle);
+        out.writeString(title);
+        out.writeList(listItems);
     }
 
-    public static final Parcelable.Creator<List> CREATOR = new Creator<List>() {
+    public static final Parcelable.Creator<RandomizeList> CREATOR = new Creator<RandomizeList>() {
         @Override
-        public List createFromParcel(Parcel source) {
-            // read bundle
-            Bundle bundle = source.readBundle();
-
-            // instantiate List
-            return new List(bundle.getString(KEY_TITLE),bundle.getStringArrayList(KEY_LIST_ITEMS));
+        public RandomizeList createFromParcel(Parcel source) {
+            return new RandomizeList(source);
         }
 
         @Override
-    public List[] newArray(int size)
+    public RandomizeList[] newArray(int size)
         {
-            return new List[size];
+            return new RandomizeList[size];
         }
     };
 
@@ -112,8 +110,8 @@ public class List implements Parcelable, Serializable {
 
     @Override
     public boolean equals(Object object) {
-        if (object != null && object instanceof List) {
-            List list = (List) object;
+        if (object != null && object instanceof RandomizeList) {
+            RandomizeList list = (RandomizeList) object;
             if (listItems == null) {
                 return (list.listItems == null);
             } else {
