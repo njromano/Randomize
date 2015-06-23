@@ -58,8 +58,8 @@ public class MainActivity extends ActionBarActivity {
     }
 
     @Override
-    protected void onStart() {
-        super.onStart();
+    protected void onResume() {
+        super.onResume();
 
         Intent intent = getIntent();
         if (intent.hasExtra(EditList.EXTRA_SAVED)) {
@@ -70,7 +70,21 @@ public class MainActivity extends ActionBarActivity {
             saveLists(arrayList);
         }
 
-        adapter.notifyDataSetChanged();
+        listView = (ListView) findViewById(R.id.listview);
+
+        // set up ArrayAdapter to capture the array
+        adapter = new ArrayAdapter(this, android.R.layout.simple_list_item_1, arrayList);
+        listView.setAdapter(adapter);
+        listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, final View view,
+                                    int position, long id) {
+                Intent intent = new Intent(getApplicationContext(), EditList.class);
+                intent.putExtra(EXTRA_CHOSEN, position);
+                intent.putExtra(EXTRA_LISTS, arrayList);
+                startActivity(intent);
+            }
+        });
     }
 
     @Override
