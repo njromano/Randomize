@@ -26,10 +26,10 @@ import java.util.ArrayList;
 
 public class MainActivity extends ActionBarActivity {
 
-    public final static String EXTRA_CHOSEN = "com.example.nick.Randomize.CHOSEN";
-    public final static String EXTRA_LISTS = "com.example.nick.Randomize.LISTS";
-    private ArrayList<RandomizeList> arrayList;
-    private ArrayAdapter adapter;
+    public final static String EXTRA_CHOSEN = "com.example.nick.Randomize.CHOSEN"; // position key
+    public final static String EXTRA_LISTS = "com.example.nick.Randomize.LISTS"; // lists key
+    private ArrayList<RandomizeList> arrayList; // list of all RandomizeLists
+    private ArrayAdapter adapter; // adapter to handle listView
     private ListView listView;
 
     @Override
@@ -37,68 +37,40 @@ public class MainActivity extends ActionBarActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+        // load the lists from memory
         arrayList = loadLists();
-
-        // set up ListView to display the list items
-        listView = (ListView) findViewById(R.id.listview);
-
-        // set up ArrayAdapter to capture the array
-        adapter = new ArrayAdapter(this, android.R.layout.simple_list_item_1, arrayList);
-        listView.setAdapter(adapter);
-        listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> parent, final View view,
-                                    int position, long id) {
-                Intent intent = new Intent(getApplicationContext(), EditList.class);
-                intent.putExtra(EXTRA_CHOSEN, position);
-                intent.putExtra(EXTRA_LISTS, arrayList);
-                startActivity(intent);
-            }
-        });
     }
 
     @Override
     protected void onResume() {
         super.onResume();
 
+        // grab edited version of lists from EditList if applicable
         Intent intent = getIntent();
         if (intent.hasExtra(EditList.EXTRA_SAVED)) {
-            // grab the List object
+            // grab the list of RandomizeLists
             arrayList = intent.getParcelableArrayListExtra(EditList.EXTRA_SAVED);
 
             // save it
             saveLists(arrayList);
         }
 
-        listView = (ListView) findViewById(R.id.listview);
 
-        // set up ArrayAdapter to capture the array
+        // set us up the UI
+        listView = (ListView) findViewById(R.id.listview);
         adapter = new ArrayAdapter(this, android.R.layout.simple_list_item_1, arrayList);
         listView.setAdapter(adapter);
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, final View view,
                                     int position, long id) {
+                // when item in list is clicked:
                 Intent intent = new Intent(getApplicationContext(), EditList.class);
-                intent.putExtra(EXTRA_CHOSEN, position);
-                intent.putExtra(EXTRA_LISTS, arrayList);
-                startActivity(intent);
+                intent.putExtra(EXTRA_CHOSEN, position); // position in array
+                intent.putExtra(EXTRA_LISTS, arrayList); // all RandomizeLists in array
+                startActivity(intent); // send to EditList for editing
             }
         });
-    }
-
-    @Override
-    protected void onRestart() {
-        super.onRestart();
-
-    }
-
-    @Override
-    protected void onStop()
-    {
-        super.onPause();
-
-        adapter.notifyDataSetInvalidated();
     }
 
     @Override
@@ -117,37 +89,42 @@ public class MainActivity extends ActionBarActivity {
 
         //noinspection SimplifiableIfStatement
         if (id == R.id.action_settings) {
+            // TODO settings?
             return true;
-        } else if (id == R.id.action_new) {
+        } else if (id == R.id.action_new) { // user wants a new list
             Intent intent = new Intent(getApplicationContext(), EditList.class);
-            arrayList = loadLists();
+
+            //arrayList = loadLists();
+            // create new RandomizeList and add it to the current arrayList
             arrayList.add(new RandomizeList("New List Title"));
-            intent.putExtra(EXTRA_CHOSEN, arrayList.size() - 1);
-            intent.putParcelableArrayListExtra(EXTRA_LISTS, arrayList);
-            startActivity(intent);
+            intent.putExtra(EXTRA_CHOSEN, arrayList.size() - 1); // end of arrayList
+            intent.putParcelableArrayListExtra(EXTRA_LISTS, arrayList); // all RandomizeLists
+            startActivity(intent); // send to EditList for editing
         }
 
 
         return super.onOptionsItemSelected(item);
     }
 
+
+    // loadLists(): function for loading all RandomizeLists from memory.
+    //              Currently creates new list and saves a new file if a file was not found
     private ArrayList<RandomizeList> loadLists() {
         ArrayList<RandomizeList> lists = new ArrayList<RandomizeList>();
-        File file = new File(this.getFilesDir(), "lists");
+        File file = new File(this.getFilesDir(), "lists"); // "lists" will be the only file we need
         try {
             FileInputStream fis = new FileInputStream(file);
             ObjectInputStream ois = new ObjectInputStream(fis);
             lists = (ArrayList<RandomizeList>) ois.readObject();
             if (lists == null)
-                throw new Exception("Null list read from storage");
+                throw new Exception("Null list read from storage"); // for debugging
             ois.close();
         } catch (Exception e) {
             if (e instanceof FileNotFoundException) {
                 Log.i("MainActivity", "FileNotFoundException");
-                lists.add(new RandomizeList("New Title"));
-                saveLists(lists);
+                saveLists(lists); // save ArrayList of RandomizeLists to be loaded again
                 Log.i("MainActivity", "Made new 'lists' file\n");
-                lists = loadLists();
+                lists = loadLists(); // load again for consistency
             } else
                 e.printStackTrace();
         }
@@ -155,6 +132,8 @@ public class MainActivity extends ActionBarActivity {
         return lists;
     }
 
+    // saveLists(): function for saving ArrayList of RandomizeLists to our master "lists" file in
+    //              internal storage
     private void saveLists(ArrayList<RandomizeList> lists) {
         try {
             FileOutputStream fos = openFileOutput("lists", Context.MODE_PRIVATE);

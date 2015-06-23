@@ -88,6 +88,7 @@ public class EditList extends ActionBarActivity {
         //noinspection SimplifiableIfStatement
         if (id == R.id.action_settings)
         {
+            // TODO edit settings?
             return true;
         }
         else if (id == R.id.action_save)
@@ -96,6 +97,7 @@ public class EditList extends ActionBarActivity {
             arrayList.set(chosenIndex, chosenList);
             intent.putParcelableArrayListExtra(EXTRA_SAVED, arrayList);
             startActivity(intent);
+            finish();
         } else if (id == R.id.action_edit_title) {
             showEditTitleDialog();
             editAdapter.notifyDataSetChanged();
@@ -109,7 +111,6 @@ public class EditList extends ActionBarActivity {
     {
         EditText newItem = (EditText) findViewById(R.id.newitemtext);
         chosenList.addItem(newItem.getText().toString());
-        ListView listView = (ListView) findViewById(R.id.listeditview);
         editAdapter.notifyDataSetChanged();
         newItem.setText("");
     }
