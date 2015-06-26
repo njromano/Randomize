@@ -140,4 +140,9 @@ public class EditList extends ActionBarActivity {
 
         alert.show();
     }
+
+    private void deleteItem()
+    {
+        // TODO put deletion things here for delete button on items
+    }
 }

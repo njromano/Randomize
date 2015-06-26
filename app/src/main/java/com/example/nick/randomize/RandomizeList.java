@@ -35,7 +35,6 @@ public class RandomizeList implements Parcelable, Serializable {
     // Constructor
     public RandomizeList(String titleIn) {
         this.title = titleIn;
-        this.listRand = new Random(System.currentTimeMillis());
         this.listItems = new ArrayList<String>();
         location = null;
     }
@@ -89,7 +88,8 @@ public class RandomizeList implements Parcelable, Serializable {
     // psuedorandom function for each List
     // returns String value at randomized index
     public String getRandom() {
-        return listItems.get(listRand.nextInt(listItems.size() - 1));
+        this.listRand = new Random();
+        return listItems.get(listRand.nextInt(listItems.size()));
     }
 
 

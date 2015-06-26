@@ -46,6 +46,21 @@
                 <category android:name="android.intent.category.LEANBACK_LAUNCHER" />
             </intent-filter>
         </activity>
+        <activity
+            android:name=".RandomizeActivity"
+            android:label="Randomize!"
+            android:parentActivityName=".MainActivity"
+            android:screenOrientation="sensorPortrait"
+            android:windowSoftInputMode="adjustResize">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="com.example.nick.randomize.MainActivity"
+                />
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="android.intent.category.LEANBACK_LAUNCHER" />
+            </intent-filter>
+        </activity>
     </application>
 
 </manifest>

@@ -65,10 +65,25 @@ public class MainActivity extends ActionBarActivity {
             public void onItemClick(AdapterView<?> parent, final View view,
                                     int position, long id) {
                 // when item in list is clicked:
+                Intent intent = new Intent(getApplicationContext(), RandomizeActivity.class);
+                intent.putExtra(EXTRA_CHOSEN, position); // position in array
+                intent.putExtra(EXTRA_LISTS, arrayList); // all RandomizeLists in array
+                startActivity(intent); // send to RandomizeActivity for randomization
+            }
+        });
+
+        listView.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener()
+        {
+            @Override
+            public boolean onItemLongClick(AdapterView<?> parent, final View view, int position, long id)
+            {
+                // when item in list is long clicked
                 Intent intent = new Intent(getApplicationContext(), EditList.class);
                 intent.putExtra(EXTRA_CHOSEN, position); // position in array
                 intent.putExtra(EXTRA_LISTS, arrayList); // all RandomizeLists in array
                 startActivity(intent); // send to EditList for editing
+
+                return true; // probably a bad idea
             }
         });
     }
@@ -150,5 +165,11 @@ public class MainActivity extends ActionBarActivity {
         } catch (Exception e) {
             e.printStackTrace();
         }
+    }
+
+    // respond to deletion of item
+    private void deleteItem()
+    {
+        // TODO put deletion things here for delete button on items
     }
 }

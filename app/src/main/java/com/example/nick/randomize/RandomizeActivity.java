@@ -1,17 +1,53 @@
 package com.example.nick.randomize;
 
+import android.content.Intent;
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.ArrayAdapter;
+import android.widget.TextView;
+
+import java.util.ArrayList;
 
 
 public class RandomizeActivity extends ActionBarActivity {
+    private ArrayList<RandomizeList> arrayList;
+    private RandomizeList chosenList;
+    private int chosenIndex;
+    private ArrayAdapter editAdapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_randomize);
+
+        try {
+            Intent intent = getIntent();
+            arrayList = intent.getParcelableArrayListExtra(MainActivity.EXTRA_LISTS);
+            chosenIndex = intent.getIntExtra(MainActivity.EXTRA_CHOSEN, 0);
+            if (arrayList != null) {
+                chosenList = arrayList.get(chosenIndex);
+            } else {
+                throw new Exception("Null list array passed to RandomizeActivity");
+            }
+        }
+        catch (Exception e)
+        {
+            e.printStackTrace();
+        }
+
+    }
+
+    @Override
+    protected void onResume()
+    {
+        super.onResume();
+
+        // set activity title
+        setTitle(chosenList.title);
+        TextView textView = (TextView) this.findViewById(R.id.randomText);
+        textView.setText("Random selection: " + chosenList.getRandom());
     }
 
     @Override
