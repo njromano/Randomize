@@ -166,10 +166,4 @@ public class MainActivity extends ActionBarActivity {
             e.printStackTrace();
         }
     }
-
-    // respond to deletion of item
-    private void deleteItem()
-    {
-        // TODO put deletion things here for delete button on items
-    }
 }

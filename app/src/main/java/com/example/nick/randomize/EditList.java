@@ -102,6 +102,14 @@ public class EditList extends ActionBarActivity {
             showEditTitleDialog();
             editAdapter.notifyDataSetChanged();
         }
+        else if (id == R.id.action_delete)
+        {
+            Intent intent = new Intent(getApplicationContext(),MainActivity.class);
+            arrayList.remove(chosenIndex);
+            intent.putParcelableArrayListExtra(EXTRA_SAVED, arrayList);
+            startActivity(intent);
+            finish();
+        }
 
         return super.onOptionsItemSelected(item);
     }
