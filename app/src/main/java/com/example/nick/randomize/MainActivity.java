@@ -23,6 +23,10 @@ import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.util.ArrayList;
 
+// What to do for this Activity in general
+// TODO 1. Redesign list items to be more user-friendly (hints? buttons on items?)
+// TODO 2. Make a general settings page (?)
+
 
 public class MainActivity extends ActionBarActivity {
 
@@ -39,6 +43,8 @@ public class MainActivity extends ActionBarActivity {
 
         // load the lists from memory
         arrayList = loadLists();
+
+        // TODO add a "hint" to click on the add button when arrayList is empty?
     }
 
     @Override
@@ -50,6 +56,8 @@ public class MainActivity extends ActionBarActivity {
         if (intent.hasExtra(EditList.EXTRA_SAVED)) {
             // grab the list of RandomizeLists
             arrayList = intent.getParcelableArrayListExtra(EditList.EXTRA_SAVED);
+
+            // TODO check to be sure we want to saved what was passed
 
             // save it
             saveLists(arrayList);
