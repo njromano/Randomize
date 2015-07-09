@@ -47,7 +47,7 @@ public class RandomizeActivity extends ActionBarActivity {
         // set activity title
         setTitle(chosenList.title);
         TextView textView = (TextView) this.findViewById(R.id.randomText);
-        textView.setText("Random selection: " + chosenList.getRandom());
+        textView.setText(chosenList.getRandom());
     }
 
     @Override

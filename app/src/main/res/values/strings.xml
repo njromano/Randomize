@@ -12,6 +12,7 @@
     <string name="new_item_hint">New item...</string>
     <string name="new_item_save">Add</string>
     <string name="title_activity_randomize">Randomize</string>
+    <string name="randomTextHeader">(Randomly selected from list)</string>
 
     <string name="hello_world">Hello world!</string>
 </resources>
