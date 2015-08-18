@@ -97,6 +97,7 @@ public class EditList extends ActionBarActivity {
             Intent intent = new Intent(getApplicationContext(), MainActivity.class);
             arrayList.set(chosenIndex, chosenList);
             intent.putParcelableArrayListExtra(EXTRA_SAVED, arrayList);
+            intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
             startActivity(intent);
             finish();
         } else if (id == R.id.action_edit_title) {
@@ -106,6 +107,7 @@ public class EditList extends ActionBarActivity {
             Intent intent = new Intent(getApplicationContext(), MainActivity.class);
             arrayList.remove(chosenIndex);
             intent.putParcelableArrayListExtra(EXTRA_SAVED, arrayList);
+            intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
             startActivity(intent);
             finish();
         }
