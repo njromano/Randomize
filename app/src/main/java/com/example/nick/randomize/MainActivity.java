@@ -41,15 +41,14 @@ public class MainActivity extends ActionBarActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        // load the lists from memory
-        arrayList = loadLists();
-
         // TODO add a "hint" to click on the add button when arrayList is empty?
     }
 
     @Override
     protected void onResume() {
         super.onResume();
+
+        arrayList = loadLists();
 
         // grab edited version of lists from EditList if applicable
         Intent intent = getIntent();
@@ -67,6 +66,7 @@ public class MainActivity extends ActionBarActivity {
         // set us up the UI
         listView = (ListView) findViewById(R.id.listview);
         adapter = new ArrayAdapter(this, android.R.layout.simple_list_item_1, arrayList);
+        adapter.notifyDataSetChanged();
         listView.setAdapter(adapter);
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override

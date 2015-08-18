@@ -3,6 +3,8 @@ package com.example.nick.randomize;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.DialogFragment;
+import android.app.PendingIntent;
+import android.app.TaskStackBuilder;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Parcelable;
@@ -91,9 +93,8 @@ public class EditList extends ActionBarActivity {
             // TODO edit settings?
             return true;
         }
-        else if (id == R.id.action_save)
-        {
-            Intent intent = new Intent(getApplicationContext(),MainActivity.class);
+        else if (id == R.id.action_save && !chosenList.listItems.isEmpty()) {
+            Intent intent = new Intent(getApplicationContext(), MainActivity.class);
             arrayList.set(chosenIndex, chosenList);
             intent.putParcelableArrayListExtra(EXTRA_SAVED, arrayList);
             startActivity(intent);
@@ -101,10 +102,8 @@ public class EditList extends ActionBarActivity {
         } else if (id == R.id.action_edit_title) {
             showEditTitleDialog();
             editAdapter.notifyDataSetChanged();
-        }
-        else if (id == R.id.action_delete)
-        {
-            Intent intent = new Intent(getApplicationContext(),MainActivity.class);
+        } else if (id == R.id.action_delete) {
+            Intent intent = new Intent(getApplicationContext(), MainActivity.class);
             arrayList.remove(chosenIndex);
             intent.putParcelableArrayListExtra(EXTRA_SAVED, arrayList);
             startActivity(intent);
