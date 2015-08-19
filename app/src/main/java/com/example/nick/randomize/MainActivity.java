@@ -50,6 +50,7 @@ public class MainActivity extends ActionBarActivity {
 
         arrayList = loadLists();
 
+
         // grab edited version of lists from EditList if applicable
         Intent intent = getIntent();
         if (intent.hasExtra(EditList.EXTRA_SAVED)) {
@@ -62,6 +63,10 @@ public class MainActivity extends ActionBarActivity {
             saveLists(arrayList);
         }
 
+        if (arrayList.isEmpty())
+            Toast.makeText(getApplicationContext(),
+                    "Press the add button to add a list.",
+                    Toast.LENGTH_SHORT).show();
 
         // set us up the UI
         listView = (ListView) findViewById(R.id.listview);

@@ -74,6 +74,18 @@ public class EditList extends ActionBarActivity {
     }
 
     @Override
+    public void onResume()
+    {
+        super.onResume();
+        if (chosenList.title.equals("New List Title"))
+        {
+            Toast.makeText(getApplicationContext(),
+                    "Edit the title of your list by tapping the edit icon.",
+                    Toast.LENGTH_SHORT).show();
+        }
+    }
+
+    @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
         getMenuInflater().inflate(R.menu.menu_edit_list, menu);
@@ -92,14 +104,18 @@ public class EditList extends ActionBarActivity {
         {
             // TODO edit settings?
             return true;
-        }
-        else if (id == R.id.action_save && !chosenList.listItems.isEmpty()) {
+        } else if (id == R.id.action_save && !chosenList.listItems.isEmpty()) {
             Intent intent = new Intent(getApplicationContext(), MainActivity.class);
             arrayList.set(chosenIndex, chosenList);
             intent.putParcelableArrayListExtra(EXTRA_SAVED, arrayList);
             intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
             startActivity(intent);
             finish();
+        } else if (id == R.id.action_save && chosenList.listItems.isEmpty()){
+            Toast.makeText(getApplicationContext(),
+                    "Please add some items into your list before saving it.",
+                    Toast.LENGTH_SHORT)
+                    .show();
         } else if (id == R.id.action_edit_title) {
             showEditTitleDialog();
             editAdapter.notifyDataSetChanged();
@@ -153,5 +169,11 @@ public class EditList extends ActionBarActivity {
     private void deleteItem()
     {
         // TODO put deletion things here for delete button on items
+    }
+
+    // wrapper function for checking if this RandomizeList has any elements in it
+    private boolean listIsEmpty()
+    {
+        return chosenList.listItems.isEmpty();
     }
 }
