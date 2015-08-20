@@ -2,6 +2,7 @@ package com.example.nick.randomize;
 
 import android.app.Activity;
 import android.app.AlertDialog;
+import android.app.Dialog;
 import android.app.DialogFragment;
 import android.app.PendingIntent;
 import android.app.TaskStackBuilder;
@@ -13,6 +14,7 @@ import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.WindowManager;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.EditText;
@@ -60,7 +62,7 @@ public class EditList extends ActionBarActivity {
         ListView listView = (ListView) findViewById(R.id.listeditview);
 
         // set up ArrayAdapter to capture the array
-        editAdapter = new ArrayAdapter(this, android.R.layout.simple_list_item_1, editList);
+        editAdapter = new CustomArrayAdapter(this, editList);
         listView.setAdapter(editAdapter);
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
@@ -141,15 +143,16 @@ public class EditList extends ActionBarActivity {
     }
 
     public void showEditTitleDialog() {
-        AlertDialog.Builder alert = new AlertDialog.Builder(this);
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+
 
         final EditText edittext = new EditText(this);
-        alert.setTitle("Enter new title");
-        alert.setMessage("");
+        builder.setTitle("");
+        builder.setMessage("Enter your new title");
         edittext.setText(chosenList.title);
-        alert.setView(edittext);
+        edittext.setSelectAllOnFocus(true);
 
-        alert.setPositiveButton("Save Title", new DialogInterface.OnClickListener() {
+        builder.setPositiveButton("Save Title", new DialogInterface.OnClickListener() {
             public void onClick(DialogInterface dialog, int whichButton) {
 
                 chosenList.title = edittext.getText().toString();
@@ -157,18 +160,27 @@ public class EditList extends ActionBarActivity {
             }
         });
 
-        alert.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+        builder.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
             public void onClick(DialogInterface dialog, int whichButton) {
                 dialog.cancel();
             }
         });
 
-        alert.show();
-    }
+        final AlertDialog alert = builder.create();
 
-    private void deleteItem()
-    {
-        // TODO put deletion things here for delete button on items
+        edittext.setOnFocusChangeListener(new View.OnFocusChangeListener() {
+            @Override
+            public void onFocusChange(View v, boolean hasFocus) {
+                if (hasFocus) {
+                    alert.getWindow().setSoftInputMode(WindowManager.
+                            LayoutParams.SOFT_INPUT_STATE_ALWAYS_VISIBLE);
+                }
+            }
+        });
+
+        alert.setView(edittext);
+
+        alert.show();
     }
 
     // wrapper function for checking if this RandomizeList has any elements in it

@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:orientation="horizontal"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
@@ -8,14 +7,37 @@
         android:id="@+id/itemTitle"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Item Title"/>
+        android:layout_centerVertical="true"
+        android:layout_alignParentLeft="true"
+        android:paddingLeft="8dp"
+        android:paddingTop="10dp"
+        android:paddingBottom="10dp"
+        android:textSize="20sp"
+        />
 
     <ImageButton
         android:id="@+id/itemDelete"
         android:src="@drawable/ic_action_remove"
+        android:background="@android:color/transparent"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:onClick="deleteItem"/>
+        android:layout_alignParentRight="true"
+        android:layout_centerVertical="true"
+        android:paddingTop="10dp"
+        android:paddingBottom="10dp"
+        android:layout_marginRight="5dp"/>
+
+    <ImageButton
+        android:id="@+id/itemEdit"
+        android:src="@drawable/ic_action_edit"
+        android:background="@android:color/transparent"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_toLeftOf="@id/itemDelete"
+        android:layout_centerVertical="true"
+        android:paddingTop="10dp"
+        android:paddingBottom="10dp"
+        android:layout_marginRight="5dp"/>
     <!-- TODO - maybe pass the item it is in the list? Maybe not here but in MainActivity? -->
 
-</LinearLayout>
+</RelativeLayout>
