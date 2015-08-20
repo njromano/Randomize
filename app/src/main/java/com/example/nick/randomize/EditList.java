@@ -11,6 +11,7 @@ import android.content.Intent;
 import android.os.Parcelable;
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -35,6 +36,7 @@ public class EditList extends ActionBarActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
         setContentView(R.layout.activity_edit_list);
 
         // fetch intent from MainActivity
@@ -53,16 +55,25 @@ public class EditList extends ActionBarActivity {
             e.printStackTrace();
         }
 
+        String debug = new String();
+        for(int i=0; i<chosenList.itemsDone.size();i++)
+        {
+            debug = debug + chosenList.itemsDone.get(i) + "\n";
+        }
+        Log.d("EditList", "Done list dump: " + debug);
+
         // set activity title
         setTitle(chosenList.title);
 
         ArrayList<String> editList = new ArrayList<String>();
         editList = chosenList.listItems;
+        ArrayList<String> doneList = new ArrayList<>();
+        doneList = chosenList.itemsDone;
 
         ListView listView = (ListView) findViewById(R.id.listeditview);
 
         // set up ArrayAdapter to capture the array
-        editAdapter = new CustomArrayAdapter(this, editList);
+        editAdapter = new CustomArrayAdapter(this, chosenList.listItems, chosenList.itemsDone);
         listView.setAdapter(editAdapter);
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override

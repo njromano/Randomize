@@ -25,6 +25,7 @@ public class RandomizeList implements Parcelable, Serializable {
     public String title;
     // items in list
     public ArrayList<String> listItems;
+    public ArrayList<String> itemsDone;
     // keys for above variables for Bundle
     private static final String KEY_TITLE = "title";
     private static final String KEY_LIST_ITEMS = "listItems";
@@ -36,6 +37,7 @@ public class RandomizeList implements Parcelable, Serializable {
     public RandomizeList(String titleIn) {
         this.title = titleIn;
         this.listItems = new ArrayList<String>();
+        this.itemsDone = new ArrayList<String>();
         location = null;
     }
 
@@ -50,6 +52,7 @@ public class RandomizeList implements Parcelable, Serializable {
     {
         this.title = parcel.readString();
         this.listItems = parcel.readArrayList(null);
+        this.itemsDone = parcel.readArrayList(null);
     }
 
     // Parcelable implementations
@@ -64,6 +67,7 @@ public class RandomizeList implements Parcelable, Serializable {
     {
         out.writeString(title);
         out.writeList(listItems);
+        out.writeList(itemsDone);
     }
 
     public static final Parcelable.Creator<RandomizeList> CREATOR = new Creator<RandomizeList>() {
@@ -87,9 +91,16 @@ public class RandomizeList implements Parcelable, Serializable {
 
     // psuedorandom function for each List
     // returns String value at randomized index
-    public String getRandom() {
-        this.listRand = new Random();
-        return listItems.get(listRand.nextInt(listItems.size()));
+    public String getRandom() throws Exception{
+        boolean isDone;
+        int randIndex;
+        do {
+            this.listRand = new Random();
+            randIndex = listRand.nextInt(listItems.size());
+            isDone = (itemsDone.get(randIndex).equals("true"));
+        }while(isDone);
+
+        return listItems.get(randIndex);
     }
 
 
@@ -100,12 +111,14 @@ public class RandomizeList implements Parcelable, Serializable {
     // wrapper for ArrayList
     public void removeItem(int index) {
         listItems.remove(index);
+        itemsDone.remove(index);
     }
 
     // add item to List
     // wrapper for ArrayList
     public void addItem(String item) {
         listItems.add(item);
+        itemsDone.add("false");
     }
 
     @Override

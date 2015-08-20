@@ -3,6 +3,7 @@ package com.example.nick.randomize;
 import android.content.Intent;
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -40,6 +41,13 @@ public class RandomizeActivity extends ActionBarActivity {
             e.printStackTrace();
         }
 
+        String debug = new String();
+        for(int i=0; i<chosenList.itemsDone.size();i++)
+        {
+            debug = debug + chosenList.itemsDone.get(i) + "\n";
+        }
+        Log.d("EditList", "Done list dump: " + debug);
+
         // set activity title
         setTitle(chosenList.title);
         final TextView textView = (TextView) this.findViewById(R.id.randomText);
@@ -53,7 +61,15 @@ public class RandomizeActivity extends ActionBarActivity {
         {
             @Override
             public void onClick(View v) {
-                textView.setText(chosenList.getRandom());
+                String randSelect = new String();
+                try {
+                    randSelect = chosenList.getRandom();
+                } catch (Exception e){
+                    e.printStackTrace();
+                    textView.setText("All done -- nothing to show!");
+                    finish();
+                }
+                textView.setText(randSelect);
                 randView.setText("Number of Randomizations: " + ++randCount);
             }
         });

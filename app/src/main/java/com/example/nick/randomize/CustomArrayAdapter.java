@@ -3,11 +3,15 @@ package com.example.nick.randomize;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
+import android.graphics.Paint;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.WindowManager;
 import android.widget.ArrayAdapter;
+import android.widget.CheckBox;
+import android.widget.CompoundButton;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ImageView;
@@ -21,12 +25,14 @@ import java.util.ArrayList;
 public class CustomArrayAdapter extends ArrayAdapter<String> {
     private final Context context;
     private final ArrayList<String> values;
+    private final ArrayList<String> done;
 
-    public CustomArrayAdapter(Context context, ArrayList<String> values)
+    public CustomArrayAdapter(Context context, ArrayList<String> values, ArrayList<String> done)
     {
         super(context, -1, values);
         this.context = context;
         this.values = values;
+        this.done = done;
     }
 
     @Override
@@ -37,11 +43,28 @@ public class CustomArrayAdapter extends ArrayAdapter<String> {
         TextView textView = (TextView) rowView.findViewById(R.id.itemTitle);
         ImageButton deleteButton = (ImageButton) rowView.findViewById(R.id.itemDelete);
         ImageButton editButton = (ImageButton) rowView.findViewById(R.id.itemEdit);
+        CheckBox checkBox = (CheckBox) rowView.findViewById(R.id.doneCheck);
+
+        checkBox.setChecked(done.get(position).equals("true"));
+        if(checkBox.isChecked()) {
+            textView.setPaintFlags(textView.getPaintFlags() | Paint.STRIKE_THRU_TEXT_FLAG);
+        }
+        Log.d("CustomArrayAdapter", "Boxes set to checked, first box: " + done.get(0));
+        checkBox.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                CheckBox check = (CheckBox) v;
+                done.set(position,check.isChecked() ? "true" : "false");
+                notifyDataSetChanged();
+            }
+        });
+
         deleteButton.setOnClickListener(new View.OnClickListener(){
             @Override
             public void onClick(View v)
             {
                 values.remove(position);
+                done.remove(position);
                 notifyDataSetChanged();
             }
         });

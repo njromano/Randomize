@@ -3,12 +3,23 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
+    <CheckBox
+        android:id="@+id/doneCheck"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerVertical="true"
+        android:layout_alignParentLeft="true"
+        android:paddingTop="10dp"
+        android:paddingBottom="10dp"
+        android:layout_marginRight="5dp"
+        />
+
     <TextView
         android:id="@+id/itemTitle"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_centerVertical="true"
-        android:layout_alignParentLeft="true"
+        android:layout_toRightOf="@id/doneCheck"
         android:paddingLeft="8dp"
         android:paddingTop="10dp"
         android:paddingBottom="10dp"
@@ -38,6 +49,8 @@
         android:paddingTop="10dp"
         android:paddingBottom="10dp"
         android:layout_marginRight="5dp"/>
+
+
     <!-- TODO - maybe pass the item it is in the list? Maybe not here but in MainActivity? -->
 
 </RelativeLayout>
