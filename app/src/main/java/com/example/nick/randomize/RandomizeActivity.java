@@ -49,7 +49,7 @@ public class RandomizeActivity extends ActionBarActivity {
         Log.d("EditList", "Done list dump: " + debug);
 
         // set activity title
-        setTitle(chosenList.title);
+        setTitle("Item Chooser - " + chosenList.title);
         final TextView textView = (TextView) this.findViewById(R.id.randomText);
         textView.setText("Tap to Randomize");
 
