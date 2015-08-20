@@ -5,7 +5,9 @@ import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
 import android.widget.ArrayAdapter;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import java.util.ArrayList;
@@ -15,6 +17,7 @@ public class RandomizeActivity extends ActionBarActivity {
     private ArrayList<RandomizeList> arrayList;
     private RandomizeList chosenList;
     private int chosenIndex;
+    private int randCount;
     private ArrayAdapter editAdapter;
 
     @Override
@@ -37,17 +40,30 @@ public class RandomizeActivity extends ActionBarActivity {
             e.printStackTrace();
         }
 
+        // set activity title
+        setTitle(chosenList.title);
+        final TextView textView = (TextView) this.findViewById(R.id.randomText);
+        textView.setText("Tap to Randomize");
+
+        final TextView randView = (TextView) this.findViewById(R.id.randCount);
+        randCount = 0;
+
+        RelativeLayout layout = (RelativeLayout) findViewById(R.id.randomizeLayout);
+        layout.setOnClickListener(new View.OnClickListener()
+        {
+            @Override
+            public void onClick(View v) {
+                textView.setText(chosenList.getRandom());
+                randView.setText("Number of Randomizations: " + ++randCount);
+            }
+        });
+
     }
 
     @Override
     protected void onResume()
     {
         super.onResume();
-
-        // set activity title
-        setTitle(chosenList.title);
-        TextView textView = (TextView) this.findViewById(R.id.randomText);
-        textView.setText(chosenList.getRandom());
     }
 
     @Override
