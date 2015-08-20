@@ -40,8 +40,6 @@ public class MainActivity extends ActionBarActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-
-        // TODO add a "hint" to click on the add button when arrayList is empty?
     }
 
     @Override
@@ -57,8 +55,6 @@ public class MainActivity extends ActionBarActivity {
             // grab the list of RandomizeLists
             arrayList = intent.getParcelableArrayListExtra(EditList.EXTRA_SAVED);
 
-            // TODO check to be sure we want to saved what was passed
-
             // save it
             saveLists(arrayList);
         }
@@ -70,7 +66,7 @@ public class MainActivity extends ActionBarActivity {
 
         // set us up the UI
         listView = (ListView) findViewById(R.id.listview);
-        adapter = new ArrayAdapter(this, android.R.layout.simple_list_item_1, arrayList);
+        adapter = new CustomArrayAdapterMain(this, arrayList);
         adapter.notifyDataSetChanged();
         listView.setAdapter(adapter);
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
@@ -162,7 +158,7 @@ public class MainActivity extends ActionBarActivity {
 
     // saveLists(): function for saving ArrayList of RandomizeLists to our master "lists" file in
     //              internal storage
-    private void saveLists(ArrayList<RandomizeList> lists) {
+    public void saveLists(ArrayList<RandomizeList> lists) {
         try {
             FileOutputStream fos = openFileOutput("lists", Context.MODE_PRIVATE);
             ObjectOutputStream oos = new ObjectOutputStream(fos);
