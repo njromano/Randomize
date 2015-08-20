@@ -132,12 +132,7 @@ public class EditList extends ActionBarActivity {
                     Toast.LENGTH_SHORT)
                     .show();
         } else if (id == R.id.action_delete) {
-            Intent intent = new Intent(getApplicationContext(), MainActivity.class);
-            arrayList.remove(chosenIndex);
-            intent.putParcelableArrayListExtra(EXTRA_SAVED, arrayList);
-            intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
-            startActivity(intent);
-            finish();
+            showDeleteConfirmationDialog();
         }
 
         return super.onOptionsItemSelected(item);
@@ -208,6 +203,34 @@ public class EditList extends ActionBarActivity {
         });
 
         alert.setView(edittext);
+
+        alert.show();
+    }
+
+    public void showDeleteConfirmationDialog()
+    {
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setTitle("");
+        builder.setMessage("Are you sure you want to delete?");
+
+        builder.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+            public void onClick(DialogInterface dialog, int whichButton) {
+                Intent intent = new Intent(getApplicationContext(), MainActivity.class);
+                arrayList.remove(chosenIndex);
+                intent.putParcelableArrayListExtra(EXTRA_SAVED, arrayList);
+                intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
+                startActivity(intent);
+                finish();
+            }
+        });
+
+        builder.setNegativeButton("No", new DialogInterface.OnClickListener() {
+            public void onClick(DialogInterface dialog, int whichButton) {
+                dialog.cancel();
+            }
+        });
+
+        final AlertDialog alert = builder.create();
 
         alert.show();
     }
