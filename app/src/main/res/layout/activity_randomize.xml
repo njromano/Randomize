@@ -11,7 +11,7 @@
 
     <TextView
         android:id="@+id/randomText"
-        android:text="@string/hello_world"
+        android:text="@string/random_default"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:gravity="center"
@@ -21,8 +21,19 @@
         android:id="@+id/randCount"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_alignParentTop="true"
+        android:layout_centerHorizontal="true"
+        />
+
+    <Button
+        android:id="@+id/doneButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
         android:layout_centerHorizontal="true"
+        android:text="@string/done_button"
+        android:textSize="35sp"
+        android:visibility="gone"
         />
 
 </RelativeLayout>

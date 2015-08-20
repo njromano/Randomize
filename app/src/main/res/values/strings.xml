@@ -13,6 +13,7 @@
     <string name="new_item_save">Add</string>
     <string name="title_activity_randomize">Randomize</string>
     <string name="randomTextHeader">(Randomly selected from list)</string>
-
+    <string name="done_button">Done</string>
+    <string name="random_default">Tap to Randomize</string>
     <string name="hello_world">Hello world!</string>
 </resources>

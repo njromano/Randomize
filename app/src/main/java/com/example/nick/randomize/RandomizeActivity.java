@@ -1,6 +1,7 @@
 package com.example.nick.randomize;
 
 import android.content.Intent;
+import android.graphics.Paint;
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
 import android.util.Log;
@@ -8,16 +9,20 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.ArrayAdapter;
+import android.widget.Button;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import java.util.ArrayList;
 
 
 public class RandomizeActivity extends ActionBarActivity {
+    public final static String EXTRA_SAVED = "com.example.nick.Randomize.SAVED";
     private ArrayList<RandomizeList> arrayList;
     private RandomizeList chosenList;
     private int chosenIndex;
+    private int chosenRandom;
     private int randCount;
     private ArrayAdapter editAdapter;
 
@@ -46,17 +51,18 @@ public class RandomizeActivity extends ActionBarActivity {
         {
             debug = debug + chosenList.itemsDone.get(i) + "\n";
         }
-        Log.d("EditList", "Done list dump: " + debug);
+        Log.d("EditList", "Done list dump: \n" + debug);
 
         // set activity title
         setTitle("Item Chooser - " + chosenList.title);
         final TextView textView = (TextView) this.findViewById(R.id.randomText);
-        textView.setText("Tap to Randomize");
 
         final TextView randView = (TextView) this.findViewById(R.id.randCount);
         randCount = 0;
 
-        RelativeLayout layout = (RelativeLayout) findViewById(R.id.randomizeLayout);
+        final Button doneButton = (Button) this.findViewById(R.id.doneButton);
+
+        final RelativeLayout layout = (RelativeLayout) findViewById(R.id.randomizeLayout);
         layout.setOnClickListener(new View.OnClickListener()
         {
             @Override
@@ -71,16 +77,32 @@ public class RandomizeActivity extends ActionBarActivity {
                     }
                 }
 
+                textView.setPaintFlags(0);
+                doneButton.setVisibility(View.VISIBLE);
+
                 if (itemAvailable) {
                     String randSelect = new String();
-                    randSelect = chosenList.getRandom();
+                    chosenRandom = chosenList.getRandom();
+                    randSelect = chosenList.listItems.get(chosenRandom);
                     textView.setText(randSelect);
                     randView.setText("Number of Randomizations: " + ++randCount);
                 }
                 else
                 {
-                    textView.setText("All done!");
+                    textView.setText("All done. Don't forget to save!");
+                    doneButton.setVisibility(View.GONE);
                 }
+            }
+        });
+
+
+        doneButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                chosenList.itemsDone.set(chosenRandom, "true");
+                textView.setPaintFlags(textView.getPaintFlags() | Paint.STRIKE_THRU_TEXT_FLAG);
+                Toast.makeText(getApplicationContext(),
+                        "Item marked \"Done\" in your list.", Toast.LENGTH_SHORT).show();
             }
         });
 
@@ -109,6 +131,14 @@ public class RandomizeActivity extends ActionBarActivity {
         //noinspection SimplifiableIfStatement
         if (id == R.id.action_settings) {
             return true;
+        }
+        if (id == R.id.action_save) {
+            Intent intent = new Intent(getApplicationContext(), MainActivity.class);
+            arrayList.set(chosenIndex, chosenList);
+            intent.putParcelableArrayListExtra(EXTRA_SAVED, arrayList);
+            intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
+            startActivity(intent);
+            finish();
         }
 
         return super.onOptionsItemSelected(item);

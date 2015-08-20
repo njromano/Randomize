@@ -91,7 +91,7 @@ public class RandomizeList implements Parcelable, Serializable {
 
     // psuedorandom function for each List
     // returns String value at randomized index
-    public String getRandom() {
+    public int getRandom() {
         boolean isDone;
         int randIndex;
         do {
@@ -100,7 +100,7 @@ public class RandomizeList implements Parcelable, Serializable {
             isDone = (itemsDone.get(randIndex).equals("true"));
         }while(isDone);
 
-        return listItems.get(randIndex);
+        return randIndex;
     }
 
 
