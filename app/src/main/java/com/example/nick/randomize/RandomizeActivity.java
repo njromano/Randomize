@@ -61,16 +61,26 @@ public class RandomizeActivity extends ActionBarActivity {
         {
             @Override
             public void onClick(View v) {
-                String randSelect = new String();
-                try {
-                    randSelect = chosenList.getRandom();
-                } catch (Exception e){
-                    e.printStackTrace();
-                    textView.setText("All done -- nothing to show!");
-                    finish();
+                // check if there is a valid item to choose
+                boolean itemAvailable = false;
+                for(String item : chosenList.itemsDone)
+                {
+                    if (item.equals("false")) {
+                        itemAvailable = true;
+                        break;
+                    }
                 }
-                textView.setText(randSelect);
-                randView.setText("Number of Randomizations: " + ++randCount);
+
+                if (itemAvailable) {
+                    String randSelect = new String();
+                    randSelect = chosenList.getRandom();
+                    textView.setText(randSelect);
+                    randView.setText("Number of Randomizations: " + ++randCount);
+                }
+                else
+                {
+                    textView.setText("All done!");
+                }
             }
         });
 

@@ -91,7 +91,7 @@ public class RandomizeList implements Parcelable, Serializable {
 
     // psuedorandom function for each List
     // returns String value at randomized index
-    public String getRandom() throws Exception{
+    public String getRandom() {
         boolean isDone;
         int randIndex;
         do {
