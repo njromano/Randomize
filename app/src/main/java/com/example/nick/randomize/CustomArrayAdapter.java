@@ -42,8 +42,9 @@ public class CustomArrayAdapter extends ArrayAdapter<String> {
         View rowView = inflater.inflate(R.layout.item_list, parent, false);
         TextView textView = (TextView) rowView.findViewById(R.id.itemTitle);
         ImageButton deleteButton = (ImageButton) rowView.findViewById(R.id.itemDelete);
-        ImageButton editButton = (ImageButton) rowView.findViewById(R.id.itemEdit);
+        //ImageButton editButton = (ImageButton) rowView.findViewById(R.id.itemEdit);
         CheckBox checkBox = (CheckBox) rowView.findViewById(R.id.doneCheck);
+
 
         checkBox.setChecked(done.get(position).equals("true"));
         if(checkBox.isChecked()) {
@@ -68,9 +69,9 @@ public class CustomArrayAdapter extends ArrayAdapter<String> {
                 notifyDataSetChanged();
             }
         });
-        editButton.setOnClickListener(new View.OnClickListener(){
+        textView.setOnLongClickListener(new View.OnLongClickListener(){
             @Override
-            public void onClick(View v)
+            public boolean onLongClick(View v)
             {
                 AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
 
@@ -109,6 +110,7 @@ public class CustomArrayAdapter extends ArrayAdapter<String> {
                 alert.setView(edittext);
 
                 alert.show();
+                return true;
             }
         });
         textView.setText(values.get(position));

@@ -19,7 +19,9 @@ import android.view.WindowManager;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.EditText;
+import android.widget.ImageButton;
 import android.widget.ListView;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import java.util.ArrayList;
@@ -36,6 +38,9 @@ public class EditList extends ActionBarActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        // set activity title
+        setTitle("List View");
 
         setContentView(R.layout.activity_edit_list);
 
@@ -55,47 +60,44 @@ public class EditList extends ActionBarActivity {
             e.printStackTrace();
         }
 
-        String debug = new String();
+        String debug = new String("\n");
         for(int i=0; i<chosenList.itemsDone.size();i++)
         {
             debug = debug + chosenList.itemsDone.get(i) + "\n";
         }
         Log.d("EditList", "Done list dump: " + debug);
 
-        // set activity title
-        setTitle(chosenList.title);
+        TextView titleText = (TextView) this.findViewById(R.id.listTitle);
+        titleText.setText(chosenList.title);
+        titleText.setOnLongClickListener(new View.OnLongClickListener() {
+            @Override
+            public boolean onLongClick(View v) {
+                showEditTitleDialog();
+                editAdapter.notifyDataSetChanged();
+                return true;
+            }
+        });
 
-        ArrayList<String> editList = new ArrayList<String>();
-        editList = chosenList.listItems;
-        ArrayList<String> doneList = new ArrayList<>();
-        doneList = chosenList.itemsDone;
+        ImageButton editTitle = (ImageButton) this.findViewById(R.id.titleEdit);
+        editTitle.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                showEditTitleDialog();
+                editAdapter.notifyDataSetChanged();
+            }
+        });
 
         ListView listView = (ListView) findViewById(R.id.listeditview);
 
         // set up ArrayAdapter to capture the array
         editAdapter = new CustomArrayAdapter(this, chosenList.listItems, chosenList.itemsDone);
         listView.setAdapter(editAdapter);
-        listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> parent, final View view,
-                                    int position, long id) {
-                Toast.makeText(getApplicationContext(),
-                        "You clicked item" + position, Toast.LENGTH_SHORT)
-                        .show();
-            }
-        });
     }
 
     @Override
     public void onResume()
     {
         super.onResume();
-        if (chosenList.title.equals("New List Title"))
-        {
-            Toast.makeText(getApplicationContext(),
-                    "Edit the title of your list by tapping the edit icon.",
-                    Toast.LENGTH_SHORT).show();
-        }
     }
 
     @Override
@@ -129,9 +131,6 @@ public class EditList extends ActionBarActivity {
                     "Please add some items into your list before saving it.",
                     Toast.LENGTH_SHORT)
                     .show();
-        } else if (id == R.id.action_edit_title) {
-            showEditTitleDialog();
-            editAdapter.notifyDataSetChanged();
         } else if (id == R.id.action_delete) {
             Intent intent = new Intent(getApplicationContext(), MainActivity.class);
             arrayList.remove(chosenIndex);
@@ -148,8 +147,18 @@ public class EditList extends ActionBarActivity {
     public void addItem(View view)
     {
         EditText newItem = (EditText) findViewById(R.id.newitemtext);
-        chosenList.addItem(newItem.getText().toString());
-        editAdapter.notifyDataSetChanged();
+        String sanit = newItem.getText().toString().trim();
+        if(sanit != null && !sanit.equals(""))
+        {
+            chosenList.addItem(newItem.getText().toString());
+            editAdapter.notifyDataSetChanged();
+        }
+        else
+        {
+            Toast.makeText(getApplicationContext(),
+                    "Bad or missing item text. Please try again.", Toast.LENGTH_SHORT)
+                    .show();
+        }
         newItem.setText("");
     }
 
@@ -159,15 +168,24 @@ public class EditList extends ActionBarActivity {
 
         final EditText edittext = new EditText(this);
         builder.setTitle("");
-        builder.setMessage("Enter your new title");
+        builder.setMessage("Edit your title:");
         edittext.setText(chosenList.title);
         edittext.setSelectAllOnFocus(true);
 
         builder.setPositiveButton("Save Title", new DialogInterface.OnClickListener() {
             public void onClick(DialogInterface dialog, int whichButton) {
-
-                chosenList.title = edittext.getText().toString();
-                setTitle(chosenList.title);
+                String sanit = edittext.getText().toString().trim();
+                if (sanit != null && !sanit.equals("")) {
+                    chosenList.title = edittext.getText().toString();
+                    TextView titleText = (TextView) findViewById(R.id.listTitle);
+                    titleText.setText(chosenList.title);
+                }
+                else
+                {
+                    Toast.makeText(getApplicationContext(),
+                            "Bad or missing title. Please try again.", Toast.LENGTH_SHORT)
+                            .show();
+                }
             }
         });
 

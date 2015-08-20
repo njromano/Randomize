@@ -1,6 +1,8 @@
 package com.example.nick.randomize;
 
+import android.app.AlertDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Parcelable;
 import android.support.v7.app.ActionBarActivity;
@@ -9,9 +11,12 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.WindowManager;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.EditText;
 import android.widget.ListView;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import java.io.File;
@@ -116,14 +121,7 @@ public class MainActivity extends ActionBarActivity {
             // TODO settings?
             return true;
         } else if (id == R.id.action_new) { // user wants a new list
-            Intent intent = new Intent(getApplicationContext(), EditList.class);
-
-            //arrayList = loadLists();
-            // create new RandomizeList and add it to the current arrayList
-            arrayList.add(new RandomizeList("New List Title"));
-            intent.putExtra(EXTRA_CHOSEN, arrayList.size() - 1); // end of arrayList
-            intent.putParcelableArrayListExtra(EXTRA_LISTS, arrayList); // all RandomizeLists
-            startActivity(intent); // send to EditList for editing
+            showNewListDialog();
         }
 
 
@@ -174,5 +172,59 @@ public class MainActivity extends ActionBarActivity {
         } catch (Exception e) {
             e.printStackTrace();
         }
+    }
+
+    public void showNewListDialog() {
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+
+
+        final EditText edittext = new EditText(this);
+        builder.setTitle("");
+        builder.setMessage("Enter your title:");
+        edittext.setHint("Your title here...");
+
+        builder.setPositiveButton("Create List", new DialogInterface.OnClickListener() {
+            public void onClick(DialogInterface dialog, int whichButton) {
+                // sanitizing input
+                String sanit = edittext.getText().toString().trim();
+
+                if (sanit != null && !sanit.equals("")) {
+                    RandomizeList newList = new RandomizeList(edittext.getText().toString());
+                    arrayList.add(newList);
+                    Intent intent = new Intent(getApplicationContext(), EditList.class);
+                    intent.putExtra(EXTRA_CHOSEN, arrayList.size() - 1); // end of arrayList
+                    intent.putParcelableArrayListExtra(EXTRA_LISTS, arrayList); // all RandomizeLists
+                    startActivity(intent); // send to EditList for editing
+                }
+                else
+                {
+                    Toast.makeText(getApplicationContext(),
+                            "Bad or missing title. Please try again.", Toast.LENGTH_SHORT)
+                    .show();
+                }
+            }
+        });
+
+        builder.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+            public void onClick(DialogInterface dialog, int whichButton) {
+                dialog.cancel();
+            }
+        });
+
+        final AlertDialog alert = builder.create();
+
+        edittext.setOnFocusChangeListener(new View.OnFocusChangeListener() {
+            @Override
+            public void onFocusChange(View v, boolean hasFocus) {
+                if (hasFocus) {
+                    alert.getWindow().setSoftInputMode(WindowManager.
+                            LayoutParams.SOFT_INPUT_STATE_ALWAYS_VISIBLE);
+                }
+            }
+        });
+
+        alert.setView(edittext);
+
+        alert.show();
     }
 }
