@@ -4,7 +4,6 @@ import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.os.Parcelable;
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
 import android.util.Log;
@@ -16,22 +15,15 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.EditText;
 import android.widget.ListView;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
-import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.util.ArrayList;
-
-// What to do for this Activity in general
-// TODO 1. Redesign list items to be more user-friendly (hints? buttons on items?)
-// TODO 2. Make a general settings page (?)
-
 
 public class MainActivity extends ActionBarActivity {
 
@@ -48,11 +40,11 @@ public class MainActivity extends ActionBarActivity {
     }
 
     @Override
-    protected void onResume() {
+    protected void onResume() { // where most the magic happens
         super.onResume();
 
+        // first, load the lists from memory, even if we are returning to this view
         arrayList = loadLists();
-
 
         // grab edited version of lists from EditList if applicable
         Intent intent = getIntent();
@@ -64,6 +56,7 @@ public class MainActivity extends ActionBarActivity {
             saveLists(arrayList);
         }
 
+        // check if the loaded lists is empty. if so, notify the user to make a new list
         if (arrayList.isEmpty())
             Toast.makeText(getApplicationContext(),
                     "Press the add button to add a list.",
@@ -72,7 +65,7 @@ public class MainActivity extends ActionBarActivity {
         // set us up the UI
         listView = (ListView) findViewById(R.id.listview);
         adapter = new CustomArrayAdapterMain(this, arrayList);
-        adapter.notifyDataSetChanged();
+        adapter.notifyDataSetChanged(); // not entirely sure why this is here
         listView.setAdapter(adapter);
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
@@ -83,21 +76,6 @@ public class MainActivity extends ActionBarActivity {
                 intent.putExtra(EXTRA_CHOSEN, position); // position in array
                 intent.putExtra(EXTRA_LISTS, arrayList); // all RandomizeLists in array
                 startActivity(intent); // send to RandomizeActivity for randomization
-            }
-        });
-
-        listView.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener()
-        {
-            @Override
-            public boolean onItemLongClick(AdapterView<?> parent, final View view, int position, long id)
-            {
-                // when item in list is long clicked
-                Intent intent = new Intent(getApplicationContext(), EditList.class);
-                intent.putExtra(EXTRA_CHOSEN, position); // position in array
-                intent.putExtra(EXTRA_LISTS, arrayList); // all RandomizeLists in array
-                startActivity(intent); // send to EditList for editing
-
-                return true; // probably a bad idea
             }
         });
     }
@@ -117,11 +95,12 @@ public class MainActivity extends ActionBarActivity {
         int id = item.getItemId();
 
         //noinspection SimplifiableIfStatement
-        if (id == R.id.action_settings) {
-            // TODO settings?
+        if (id == R.id.action_about) {
+            showAboutDialog();
             return true;
         } else if (id == R.id.action_new) { // user wants a new list
             showNewListDialog();
+            return true;
         }
 
 
@@ -174,6 +153,7 @@ public class MainActivity extends ActionBarActivity {
         }
     }
 
+    // build dialog to ask for a title, create a list with that title, and send it to EditList
     public void showNewListDialog() {
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
 
@@ -187,17 +167,18 @@ public class MainActivity extends ActionBarActivity {
             public void onClick(DialogInterface dialog, int whichButton) {
                 // sanitizing input
                 String sanit = edittext.getText().toString().trim();
-
+                // make sure it's valid
                 if (sanit != null && !sanit.equals("")) {
                     RandomizeList newList = new RandomizeList(edittext.getText().toString());
                     arrayList.add(newList);
                     Intent intent = new Intent(getApplicationContext(), EditList.class);
                     intent.putExtra(EXTRA_CHOSEN, arrayList.size() - 1); // end of arrayList
-                    intent.putParcelableArrayListExtra(EXTRA_LISTS, arrayList); // all RandomizeLists
+                    intent.putParcelableArrayListExtra(EXTRA_LISTS, arrayList); //all RandomizeLists
                     startActivity(intent); // send to EditList for editing
                 }
                 else
                 {
+                    // Notify the user that they were SO WRONG
                     Toast.makeText(getApplicationContext(),
                             "Bad or missing title. Please try again.", Toast.LENGTH_SHORT)
                     .show();
@@ -213,6 +194,7 @@ public class MainActivity extends ActionBarActivity {
 
         final AlertDialog alert = builder.create();
 
+        // make sure the soft keyboard displays itself when we get to this dialog
         edittext.setOnFocusChangeListener(new View.OnFocusChangeListener() {
             @Override
             public void onFocusChange(View v, boolean hasFocus) {
@@ -224,6 +206,23 @@ public class MainActivity extends ActionBarActivity {
         });
 
         alert.setView(edittext);
+
+        alert.show();
+    }
+
+    // build dialog to show information about your dev overlord
+    public void showAboutDialog()
+    {
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setTitle("About");
+        builder.setMessage(R.string.about_text);
+        final AlertDialog alert = builder.create();
+
+        builder.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+            public void onClick(DialogInterface dialog, int whichButton) {
+                dialog.cancel();
+            }
+        });
 
         alert.show();
     }

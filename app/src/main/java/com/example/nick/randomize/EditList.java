@@ -1,14 +1,8 @@
 package com.example.nick.randomize;
 
-import android.app.Activity;
 import android.app.AlertDialog;
-import android.app.Dialog;
-import android.app.DialogFragment;
-import android.app.PendingIntent;
-import android.app.TaskStackBuilder;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.os.Parcelable;
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
 import android.util.Log;
@@ -16,7 +10,6 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.WindowManager;
-import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.EditText;
 import android.widget.ImageButton;
@@ -26,9 +19,10 @@ import android.widget.Toast;
 
 import java.util.ArrayList;
 
-
 public class EditList extends ActionBarActivity {
+    // key for parcel passing
     public final static String EXTRA_SAVED = "com.example.nick.Randomize.SAVED";
+    // ArrayList of all lists
     private ArrayList<RandomizeList> arrayList;
     private RandomizeList chosenList;
     private int chosenIndex;
@@ -38,10 +32,6 @@ public class EditList extends ActionBarActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
-        // set activity title
-        setTitle("List View");
-
         setContentView(R.layout.activity_edit_list);
 
         // fetch intent from MainActivity
@@ -49,6 +39,7 @@ public class EditList extends ActionBarActivity {
             Intent intent = getIntent();
             arrayList = intent.getParcelableArrayListExtra(MainActivity.EXTRA_LISTS);
             chosenIndex = intent.getIntExtra(MainActivity.EXTRA_CHOSEN, 0);
+            // check if it's a valid object
             if (arrayList != null) {
                 chosenList = arrayList.get(chosenIndex);
             } else {
@@ -60,13 +51,15 @@ public class EditList extends ActionBarActivity {
             e.printStackTrace();
         }
 
+        // debug info, dumping done items
         String debug = new String("\n");
         for(int i=0; i<chosenList.itemsDone.size();i++)
         {
             debug = debug + chosenList.itemsDone.get(i) + "\n";
         }
-        Log.d("EditList", "Done list dump: " + debug);
+        Log.d("EditList", "Done list dump: \n" + debug);
 
+        // set us up the UI
         TextView titleText = (TextView) this.findViewById(R.id.listTitle);
         titleText.setText(chosenList.title);
         titleText.setOnLongClickListener(new View.OnLongClickListener() {
@@ -89,7 +82,7 @@ public class EditList extends ActionBarActivity {
 
         ListView listView = (ListView) findViewById(R.id.listeditview);
 
-        // set up ArrayAdapter to capture the array
+        // set up CustomArrayAdapter to capture the array
         editAdapter = new CustomArrayAdapter(this, chosenList.listItems, chosenList.itemsDone);
         listView.setAdapter(editAdapter);
     }
@@ -114,25 +107,28 @@ public class EditList extends ActionBarActivity {
         // as you specify a parent activity in AndroidManifest.xml.
         int id = item.getItemId();
 
-        //noinspection SimplifiableIfStatement
-        if (id == R.id.action_settings)
-        {
-            // TODO edit settings?
-            return true;
-        } else if (id == R.id.action_save && !chosenList.listItems.isEmpty()) {
+        if (id == R.id.action_save && !chosenList.listItems.isEmpty()) {
+            // we can save the items we put in
+            // set up intent
             Intent intent = new Intent(getApplicationContext(), MainActivity.class);
+            // update our master list and put it into the intent
             arrayList.set(chosenIndex, chosenList);
             intent.putParcelableArrayListExtra(EXTRA_SAVED, arrayList);
             intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
+            // vamanos
             startActivity(intent);
             finish();
+            return true;
         } else if (id == R.id.action_save && chosenList.listItems.isEmpty()){
+            // we shouldn't be saving if we don't have anything to save. Notify the user.
             Toast.makeText(getApplicationContext(),
                     "Please add some items into your list before saving it.",
                     Toast.LENGTH_SHORT)
                     .show();
+            return true;
         } else if (id == R.id.action_delete) {
             showDeleteConfirmationDialog();
+            return true;
         }
 
         return super.onOptionsItemSelected(item);
@@ -141,8 +137,11 @@ public class EditList extends ActionBarActivity {
     // respond to new item saved
     public void addItem(View view)
     {
+        // grab the text for that item
         EditText newItem = (EditText) findViewById(R.id.newitemtext);
+        // sanitize it
         String sanit = newItem.getText().toString().trim();
+        // check if it's valid
         if(sanit != null && !sanit.equals(""))
         {
             chosenList.addItem(newItem.getText().toString());
@@ -150,33 +149,40 @@ public class EditList extends ActionBarActivity {
         }
         else
         {
+            // ask the user to try again
             Toast.makeText(getApplicationContext(),
                     "Bad or missing item text. Please try again.", Toast.LENGTH_SHORT)
                     .show();
         }
+
+        // clear the text in the view
         newItem.setText("");
     }
 
+    // show dialog for editing the title of the list
     public void showEditTitleDialog() {
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
-
-
         final EditText edittext = new EditText(this);
         builder.setTitle("");
         builder.setMessage("Edit your title:");
         edittext.setText(chosenList.title);
+
+        // make sure we select all the text inside the edittext view when we get here
         edittext.setSelectAllOnFocus(true);
 
         builder.setPositiveButton("Save Title", new DialogInterface.OnClickListener() {
             public void onClick(DialogInterface dialog, int whichButton) {
+                // check sanity
                 String sanit = edittext.getText().toString().trim();
                 if (sanit != null && !sanit.equals("")) {
+                    // we can save
                     chosenList.title = edittext.getText().toString();
                     TextView titleText = (TextView) findViewById(R.id.listTitle);
                     titleText.setText(chosenList.title);
                 }
                 else
                 {
+                    // notify that the user is a bad user. BAD!
                     Toast.makeText(getApplicationContext(),
                             "Bad or missing title. Please try again.", Toast.LENGTH_SHORT)
                             .show();
@@ -192,6 +198,7 @@ public class EditList extends ActionBarActivity {
 
         final AlertDialog alert = builder.create();
 
+        // make sure the soft input shows up when we get here
         edittext.setOnFocusChangeListener(new View.OnFocusChangeListener() {
             @Override
             public void onFocusChange(View v, boolean hasFocus) {
@@ -207,6 +214,7 @@ public class EditList extends ActionBarActivity {
         alert.show();
     }
 
+    // make sure user really wants to delete their precious list
     public void showDeleteConfirmationDialog()
     {
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
@@ -233,11 +241,5 @@ public class EditList extends ActionBarActivity {
         final AlertDialog alert = builder.create();
 
         alert.show();
-    }
-
-    // wrapper function for checking if this RandomizeList has any elements in it
-    private boolean listIsEmpty()
-    {
-        return chosenList.listItems.isEmpty();
     }
 }

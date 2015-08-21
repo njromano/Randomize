@@ -6,16 +6,13 @@
 
     <item android:id="@+id/action_save"
         android:icon="@drawable/ic_action_accept"
-        android:title="Save List"
+        android:title="@string/title_save"
         randomize:showAsAction="ifRoom"
         />
 
     <item android:id="@+id/action_delete"
         android:icon="@drawable/ic_action_discard"
-        android:title="Delete List"
+        android:title="@string/list_delete"
         randomize:showAsAction="ifRoom"
         />
-
-    <item android:id="@+id/action_settings" android:title="@string/action_settings"
-        android:orderInCategory="100" app:showAsAction="never" />
 </menu>
