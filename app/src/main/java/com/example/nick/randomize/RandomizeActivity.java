@@ -18,19 +18,20 @@ import java.util.ArrayList;
 
 
 public class RandomizeActivity extends ActionBarActivity {
+    // key for passing parcels
     public final static String EXTRA_SAVED = "com.example.nick.Randomize.SAVED";
     private ArrayList<RandomizeList> arrayList;
     private RandomizeList chosenList;
     private int chosenIndex;
-    private int chosenRandom;
-    private int randCount;
-    private ArrayAdapter editAdapter;
+    private int chosenRandom; // random number that gets generated
+    private int randCount; // number of times we have generated a result
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_randomize);
 
+        // get list from Intent
         try {
             Intent intent = getIntent();
             arrayList = intent.getParcelableArrayListExtra(MainActivity.EXTRA_LISTS);
@@ -46,6 +47,7 @@ public class RandomizeActivity extends ActionBarActivity {
             e.printStackTrace();
         }
 
+        // debugging for itemsDone
         String debug = new String();
         for(int i=0; i<chosenList.itemsDone.size();i++)
         {
@@ -55,12 +57,12 @@ public class RandomizeActivity extends ActionBarActivity {
 
         // set activity title
         setTitle("Item Chooser - " + chosenList.title);
+
+        // set us up the UI
         final TextView textView = (TextView) this.findViewById(R.id.randomText);
-
         final TextView randView = (TextView) this.findViewById(R.id.randCount);
-        randCount = 0;
-
         final Button doneButton = (Button) this.findViewById(R.id.doneButton);
+        randCount = 0;
 
         final RelativeLayout layout = (RelativeLayout) findViewById(R.id.randomizeLayout);
         layout.setOnClickListener(new View.OnClickListener()
@@ -77,9 +79,15 @@ public class RandomizeActivity extends ActionBarActivity {
                     }
                 }
 
+                // itemAvailable should ONLY be false when we have all "true" values in itemsDone
+
+                // we clicked, so refresh the textView and show the button
                 textView.setPaintFlags(0);
                 doneButton.setVisibility(View.VISIBLE);
 
+                // the magic happens here
+                // only get a random result if there is one to get
+                // otherwise show the user we are done and remind them to save
                 if (itemAvailable) {
                     String randSelect = new String();
                     chosenRandom = chosenList.getRandom();
@@ -90,16 +98,18 @@ public class RandomizeActivity extends ActionBarActivity {
                 else
                 {
                     textView.setText("All done. Don't forget to save!");
+                    // make the button go away
                     doneButton.setVisibility(View.GONE);
                 }
             }
         });
 
-
         doneButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                // set the itemsDone selection to "true"
                 chosenList.itemsDone.set(chosenRandom, "true");
+                // clearly show that the items is now marked "done"
                 textView.setPaintFlags(textView.getPaintFlags() | Paint.STRIKE_THRU_TEXT_FLAG);
                 Toast.makeText(getApplicationContext(),
                         "Item marked \"Done\" in your list.", Toast.LENGTH_SHORT).show();
@@ -128,11 +138,8 @@ public class RandomizeActivity extends ActionBarActivity {
         // as you specify a parent activity in AndroidManifest.xml.
         int id = item.getItemId();
 
-        //noinspection SimplifiableIfStatement
-        if (id == R.id.action_settings) {
-            return true;
-        }
         if (id == R.id.action_save) {
+            // similar to other save. just set the master arrayList back up and pass it back to Main
             Intent intent = new Intent(getApplicationContext(), MainActivity.class);
             arrayList.set(chosenIndex, chosenList);
             intent.putParcelableArrayListExtra(EXTRA_SAVED, arrayList);
