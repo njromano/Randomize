@@ -5,13 +5,8 @@
     tools:context="com.example.nick.randomize.RandomizeActivity">
 
     <item android:id="@+id/action_save"
-        android:icon="@drawable/ic_action_accept"
+        android:icon="@drawable/ic_save_white_36dp"
         android:title="@string/save_list"
         randomize:showAsAction="ifRoom"
         />
-    <item
-        android:id="@+id/action_settings"
-        android:title="@string/action_settings"
-        android:orderInCategory="100"
-        app:showAsAction="never" />
 </menu>

@@ -1,7 +1,13 @@
 package com.example.nick.randomize;
 
+import android.content.Context;
 import android.content.Intent;
 import android.graphics.Paint;
+import android.hardware.Sensor;
+import android.hardware.SensorEvent;
+import android.hardware.SensorEventListener;
+import android.hardware.SensorManager;
+import android.os.Vibrator;
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
 import android.util.Log;
@@ -25,6 +31,36 @@ public class RandomizeActivity extends ActionBarActivity {
     private int chosenIndex;
     private int chosenRandom; // random number that gets generated
     private int randCount; // number of times we have generated a result
+
+    private SensorManager mSensorManager;
+    private float mAccel; // acceleration apart from gravity
+    private float mAccelCurrent; // current acceleration including gravity
+    private float mAccelLast; // last acceleration including gravity
+
+    private final SensorEventListener mSensorListener = new SensorEventListener() {
+
+        public void onSensorChanged(SensorEvent se) {
+            float x = se.values[0];
+            float y = se.values[1];
+            float z = se.values[2];
+            mAccelLast = mAccelCurrent;
+            mAccelCurrent = (float) Math.sqrt((double) (x*x + y*y + z*z));
+            float delta = mAccelCurrent - mAccelLast;
+            mAccel = mAccel * 0.9f + delta; // perform low-cut filter
+
+            if (mAccel > 6)
+            {
+                findNextItem();
+                Vibrator v = (Vibrator) getApplicationContext()
+                        .getSystemService(Context.VIBRATOR_SERVICE);
+                v.vibrate(100);
+            }
+        }
+
+        public void onAccuracyChanged(Sensor sensor, int accuracy) {
+        }
+    };
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -56,57 +92,26 @@ public class RandomizeActivity extends ActionBarActivity {
         Log.d("EditList", "Done list dump: \n" + debug);
 
         // set activity title
-        setTitle("Item Chooser - " + chosenList.title);
+        setTitle("Item Randomizer - " + chosenList.title);
 
         // set us up the UI
-        final TextView textView = (TextView) this.findViewById(R.id.randomText);
-        final TextView randView = (TextView) this.findViewById(R.id.randCount);
-        final Button doneButton = (Button) this.findViewById(R.id.doneButton);
+
         randCount = 0;
 
-        final RelativeLayout layout = (RelativeLayout) findViewById(R.id.randomizeLayout);
+        RelativeLayout layout = (RelativeLayout) findViewById(R.id.randomizeLayout);
         layout.setOnClickListener(new View.OnClickListener()
         {
             @Override
-            public void onClick(View v) {
-                // check if there is a valid item to choose
-                boolean itemAvailable = false;
-                for(String item : chosenList.itemsDone)
-                {
-                    if (item.equals("false")) {
-                        itemAvailable = true;
-                        break;
-                    }
-                }
-
-                // itemAvailable should ONLY be false when we have all "true" values in itemsDone
-
-                // we clicked, so refresh the textView and show the button
-                textView.setPaintFlags(0);
-                doneButton.setVisibility(View.VISIBLE);
-
-                // the magic happens here
-                // only get a random result if there is one to get
-                // otherwise show the user we are done and remind them to save
-                if (itemAvailable) {
-                    String randSelect = new String();
-                    chosenRandom = chosenList.getRandom();
-                    randSelect = chosenList.listItems.get(chosenRandom);
-                    textView.setText(randSelect);
-                    randView.setText("Number of Randomizations: " + ++randCount);
-                }
-                else
-                {
-                    textView.setText("All done. Don't forget to save!");
-                    // make the button go away
-                    doneButton.setVisibility(View.GONE);
-                }
+              public void onClick(View v) {
+                findNextItem();
             }
         });
 
+        Button doneButton = (Button) findViewById(R.id.doneButton);
         doneButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                TextView textView = (TextView) findViewById(R.id.randomText);
                 // set the itemsDone selection to "true"
                 chosenList.itemsDone.set(chosenRandom, "true");
                 // clearly show that the items is now marked "done"
@@ -116,12 +121,28 @@ public class RandomizeActivity extends ActionBarActivity {
             }
         });
 
+        mSensorManager = (SensorManager) getSystemService(Context.SENSOR_SERVICE);
+        mSensorManager.registerListener(mSensorListener,
+                mSensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER),
+                SensorManager.SENSOR_DELAY_NORMAL);
+        mAccel = 0.00f;
+        mAccelCurrent = SensorManager.GRAVITY_EARTH;
+        mAccelLast = SensorManager.GRAVITY_EARTH;
     }
 
     @Override
     protected void onResume()
     {
         super.onResume();
+        mSensorManager.registerListener(mSensorListener,
+                mSensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER),
+                SensorManager.SENSOR_DELAY_NORMAL);
+    }
+
+    @Override
+    protected void onPause() {
+        mSensorManager.unregisterListener(mSensorListener);
+        super.onPause();
     }
 
     @Override
@@ -149,5 +170,44 @@ public class RandomizeActivity extends ActionBarActivity {
         }
 
         return super.onOptionsItemSelected(item);
+    }
+
+    public void findNextItem()
+    {
+        TextView textView = (TextView) findViewById(R.id.randomText);
+        TextView randView = (TextView) findViewById(R.id.randCount);
+        Button doneButton = (Button) findViewById(R.id.doneButton);
+        // check if there is a valid item to choose
+        boolean itemAvailable = false;
+        for(String item : chosenList.itemsDone)
+        {
+            if (item.equals("false")) {
+                itemAvailable = true;
+                break;
+            }
+        }
+
+        // itemAvailable should ONLY be false when we have all "true" values in itemsDone
+
+        // we clicked, so refresh the textView and show the button
+        textView.setPaintFlags(0);
+        doneButton.setVisibility(View.VISIBLE);
+
+        // the magic happens here
+        // only get a random result if there is one to get
+        // otherwise show the user we are done and remind them to save
+        if (itemAvailable) {
+            String randSelect = new String();
+            chosenRandom = chosenList.getRandom();
+            randSelect = chosenList.listItems.get(chosenRandom);
+            textView.setText(randSelect);
+            randView.setText("Number of Randomizations: " + ++randCount);
+        }
+        else
+        {
+            textView.setText("All done. Don't forget to save!");
+            // make the button go away
+            doneButton.setVisibility(View.GONE);
+        }
     }
 }

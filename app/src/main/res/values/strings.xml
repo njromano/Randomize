@@ -19,7 +19,7 @@
     <string name="main_title">Your Lists</string>
     <string name="new_item_hint">New item...</string>
     <string name="done_button">Done</string>
-    <string name="random_default">Tap to Randomize</string>
+    <string name="random_default">Tap or Shake to Randomize</string>
     <string name="about_text">Nicholas Romano\nnicholas.romano@my.maryvillecollege.edu</string>
     <string name="save_list">Save List</string>
     <string name="list_delete">Delete List</string>

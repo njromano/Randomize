@@ -23,6 +23,7 @@
         android:layout_height="wrap_content"
         android:layout_centerVertical="true"
         android:layout_toRightOf="@id/doneCheck"
+        android:layout_toLeftOf="@+id/itemDelete"
         android:layout_toEndOf="@id/doneCheck"
         android:paddingLeft="8dp"
         android:paddingTop="10dp"

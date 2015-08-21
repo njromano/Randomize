@@ -58,10 +58,16 @@ public class MainActivity extends AppCompatActivity {
         }
 
         // check if the loaded lists is empty. if so, notify the user to make a new list
-        if (arrayList.isEmpty())
+        View titleBox = (View) findViewById(R.id.titleBox);
+        if (arrayList.isEmpty()) {
+            titleBox.setVisibility(View.GONE);
             Toast.makeText(getApplicationContext(),
                     "Press the add button to add a list.",
                     Toast.LENGTH_SHORT).show();
+        }
+        else {
+            titleBox.setVisibility(View.VISIBLE);
+        }
 
         // set us up the UI
         listView = (ListView) findViewById(R.id.listview);
