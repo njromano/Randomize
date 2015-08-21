@@ -1,18 +1,9 @@
 package com.example.nick.randomize;
 
-import android.content.Context;
-import android.os.Bundle;
 import android.os.Parcel;
 import android.os.Parcelable;
 
 import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.io.ObjectInput;
-import java.io.ObjectInputStream;
-import java.io.ObjectOutput;
-import java.io.ObjectOutputStream;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Random;
@@ -26,28 +17,30 @@ public class RandomizeList implements Parcelable, Serializable {
     // items in list
     public ArrayList<String> listItems;
     public ArrayList<String> itemsDone;
-    // keys for above variables for Bundle
-    private static final String KEY_TITLE = "title";
-    private static final String KEY_LIST_ITEMS = "listItems";
+
+    // Why is itemsDone an ArrayList<String>?
+    //      I wanted the list of done items to be as close as possible to the list of actual items.
+    //      A better way to do it would be to make a new List-like class for booleans or a
+    //      Parcelable Item class that can be passed within an ArrayList itself. Time has been my
+    //      constraint in this endeavor, however.
+
     // random number generator for randomizing functions
     private Random listRand;
-    private static File location;
 
-    // Constructor
+    // Constructors
     public RandomizeList(String titleIn) {
         this.title = titleIn;
         this.listItems = new ArrayList<String>();
         this.itemsDone = new ArrayList<String>();
-        location = null;
     }
 
     public RandomizeList(String titleIn, ArrayList<String> itemsIn)
     {
         this.title = titleIn;
         this.listItems = itemsIn;
-        location = null;
     }
 
+    // constructor for parcelable
     public RandomizeList(Parcel parcel)
     {
         this.title = parcel.readString();
@@ -94,21 +87,23 @@ public class RandomizeList implements Parcelable, Serializable {
     public int getRandom() {
         boolean isDone;
         int randIndex;
+
+        // iterate through the list randomly until we find one that isn't "done"
         do {
             this.listRand = new Random();
             randIndex = listRand.nextInt(listItems.size());
             isDone = (itemsDone.get(randIndex).equals("true"));
         }while(isDone);
 
+        // Previous versions returned the string from listItems, however RandomizeList needed only
+        // the index itself for simplicity in that class. (i.e. I did not feel like managing another
+        // variable there)
         return randIndex;
     }
 
-
-    // TODO implement random ordering function
-
-
     // remove item from List at given index
     // wrapper for ArrayList
+    // doesn't seem to be used, however I am keeping it to demonstrate how it should be done
     public void removeItem(int index) {
         listItems.remove(index);
         itemsDone.remove(index);
@@ -121,6 +116,7 @@ public class RandomizeList implements Parcelable, Serializable {
         itemsDone.add("false");
     }
 
+    // to be honest, I forgot why I even needed this. perhaps for an ArrayList method?
     @Override
     public boolean equals(Object object) {
         if (object != null && object instanceof RandomizeList) {
@@ -134,39 +130,4 @@ public class RandomizeList implements Parcelable, Serializable {
 
         return false;
     }
-
-    /* commenting out the following to try simpler data storage
-    // functions for reading/writing lists from/to storage
-    public void saveData(Context context) {
-        if (location == null)
-            location = context.getExternalFilesDir(null);
-        ObjectOutput out;
-        try {
-            File output = new File(location, "lists.data");
-            out = new ObjectOutputStream(new FileOutputStream(output));
-            out.writeObject(this);
-            out.close();
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-    }
-
-    public static ArrayList<List> loadData(Context context) {
-        if (location == null) {
-            location = context.getExternalFilesDir(null);
-        }
-        ObjectInput in;
-        ArrayList<List> loadList = null;
-        try {
-            FileInputStream fis = new FileInputStream(location.getPath() + File.separator + "lists.data");
-            in = new ObjectInputStream(fis);
-            //loadList = (ArrayList<List>) in.readObject();
-            in.close();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-        return loadList;
-    }
-
-    */
 }
