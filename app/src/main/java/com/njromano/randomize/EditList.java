@@ -1,4 +1,4 @@
-package com.example.nick.randomize;
+package com.njromano.randomize;
 
 import android.app.AlertDialog;
 import android.content.DialogInterface;
@@ -16,6 +16,8 @@ import android.widget.ImageButton;
 import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import com.njromano.randomize.R;
 
 import java.util.ArrayList;
 
@@ -51,6 +53,7 @@ public class EditList extends ActionBarActivity {
             e.printStackTrace();
         }
 
+        /*
         // debug info, dumping done items
         String debug = new String("\n");
         for(int i=0; i<chosenList.itemsDone.size();i++)
@@ -58,6 +61,7 @@ public class EditList extends ActionBarActivity {
             debug = debug + chosenList.itemsDone.get(i) + "\n";
         }
         Log.d("EditList", "Done list dump: \n" + debug);
+        */
 
         // set us up the UI
         TextView titleText = (TextView) this.findViewById(R.id.listTitle);

@@ -1,4 +1,4 @@
-package com.example.nick.randomize;
+package com.njromano.randomize;
 
 import android.app.AlertDialog;
 import android.content.Context;
@@ -14,6 +14,8 @@ import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.TextView;
+
+import com.njromano.randomize.R;
 
 import java.util.ArrayList;
 
@@ -50,7 +52,7 @@ public class CustomArrayAdapter extends ArrayAdapter<String> {
         }
 
         // debug
-        Log.d("CustomArrayAdapter", "Boxes set to checked, first box: " + done.get(0));
+        //Log.d("CustomArrayAdapter", "Boxes set to checked, first box: " + done.get(0));
 
 
         checkBox.setOnClickListener(new View.OnClickListener() {

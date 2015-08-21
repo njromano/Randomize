@@ -1,9 +1,8 @@
-package com.example.nick.randomize;
+package com.njromano.randomize;
 
 import android.os.Parcel;
 import android.os.Parcelable;
 
-import java.io.File;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Random;

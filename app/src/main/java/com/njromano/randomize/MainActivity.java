@@ -1,10 +1,10 @@
-package com.example.nick.randomize;
+package com.njromano.randomize;
 
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.support.v7.app.ActionBarActivity;
+import android.media.Image;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
@@ -15,8 +15,13 @@ import android.view.WindowManager;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.EditText;
+import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.ListView;
+import android.widget.TextView;
 import android.widget.Toast;
+
+import com.njromano.randomize.R;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -221,8 +226,15 @@ public class MainActivity extends AppCompatActivity {
     public void showAboutDialog()
     {
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
-        builder.setTitle("About");
-        builder.setMessage(R.string.about_text);
+        LinearLayout layout = new LinearLayout(this);
+        ImageView icon = new ImageView(this);
+        icon.setImageResource(R.mipmap.launcher_icon);
+        TextView text = new TextView(this);
+        text.setText(R.string.about_text);
+
+        layout.addView(icon);
+        layout.addView(text);
+
         final AlertDialog alert = builder.create();
 
         builder.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
@@ -231,6 +243,7 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
+        alert.setView(layout);
         alert.show();
     }
 }

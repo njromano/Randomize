@@ -1,6 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="com.example.nick.randomize" >
+    package="com.njromano.randomize"
+    android:versionCode="1"
+    android:versionName="0.8">
 
     <uses-feature
         android:name="android.hardware.touchscreen"
@@ -17,7 +19,7 @@
         android:label="@string/app_name"
         android:theme="@style/AppTheme" >
         <activity
-            android:name=".MainActivity"
+            android:name="com.njromano.randomize.MainActivity"
             android:label="@string/app_name">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -26,14 +28,14 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".EditList"
+            android:name="com.njromano.randomize.EditList"
             android:label="@string/title_activity_edit_list"
-            android:parentActivityName=".MainActivity"
+            android:parentActivityName="com.njromano.randomize.MainActivity"
             android:screenOrientation="sensorPortrait"
             android:windowSoftInputMode="adjustResize">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value="com.example.nick.randomize.MainActivity" />
+                android:value="com.njromano.randomize.MainActivity" />
 
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -42,14 +44,14 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".RandomizeActivity"
+            android:name="com.njromano.randomize.RandomizeActivity"
             android:label="Randomize!"
-            android:parentActivityName=".MainActivity"
+            android:parentActivityName="com.njromano.randomize.MainActivity"
             android:screenOrientation="sensorPortrait"
             android:windowSoftInputMode="adjustResize">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value="com.example.nick.randomize.MainActivity"
+                android:value="com.njromano.randomize.MainActivity"
                 />
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />

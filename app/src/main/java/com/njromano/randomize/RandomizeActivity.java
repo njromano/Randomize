@@ -1,4 +1,4 @@
-package com.example.nick.randomize;
+package com.njromano.randomize;
 
 import android.content.Context;
 import android.content.Intent;
@@ -14,11 +14,12 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import com.njromano.randomize.R;
 
 import java.util.ArrayList;
 
@@ -83,6 +84,7 @@ public class RandomizeActivity extends ActionBarActivity {
             e.printStackTrace();
         }
 
+        /*
         // debugging for itemsDone
         String debug = new String();
         for(int i=0; i<chosenList.itemsDone.size();i++)
@@ -90,6 +92,7 @@ public class RandomizeActivity extends ActionBarActivity {
             debug = debug + chosenList.itemsDone.get(i) + "\n";
         }
         Log.d("EditList", "Done list dump: \n" + debug);
+        */
 
         // set activity title
         setTitle("Item Randomizer - " + chosenList.title);
