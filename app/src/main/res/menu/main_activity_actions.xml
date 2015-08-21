@@ -3,7 +3,7 @@
       xmlns:randomize="http://schemas.android.com/apk/res-auto" >
     <!-- new list action -->
     <item android:id="@+id/action_new"
-          android:icon="@drawable/ic_action_new"
+          android:icon="@drawable/ic_add_white_36dp"
           android:title="@string/action_new"
           randomize:showAsAction="ifRoom" />
 
