@@ -11,16 +11,14 @@ import android.view.ViewGroup;
 import android.view.WindowManager;
 import android.widget.ArrayAdapter;
 import android.widget.CheckBox;
-import android.widget.CompoundButton;
 import android.widget.EditText;
 import android.widget.ImageButton;
-import android.widget.ImageView;
 import android.widget.TextView;
 
 import java.util.ArrayList;
 
 /**
- * Created by Nick on 8/19/15.
+ * Created by Nick on 8/19/15 while sitting inside a nuclear shelter eating non perishables
  */
 public class CustomArrayAdapter extends ArrayAdapter<String> {
     private final Context context;
@@ -40,21 +38,26 @@ public class CustomArrayAdapter extends ArrayAdapter<String> {
         LayoutInflater inflater = (LayoutInflater) context
                 .getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         View rowView = inflater.inflate(R.layout.item_list, parent, false);
+
         TextView textView = (TextView) rowView.findViewById(R.id.itemTitle);
         ImageButton deleteButton = (ImageButton) rowView.findViewById(R.id.itemDelete);
-        //ImageButton editButton = (ImageButton) rowView.findViewById(R.id.itemEdit);
         CheckBox checkBox = (CheckBox) rowView.findViewById(R.id.doneCheck);
 
-
+        // check if the check boxes should be checked, if so check them and strike out the text
         checkBox.setChecked(done.get(position).equals("true"));
         if(checkBox.isChecked()) {
             textView.setPaintFlags(textView.getPaintFlags() | Paint.STRIKE_THRU_TEXT_FLAG);
         }
+
+        // debug
         Log.d("CustomArrayAdapter", "Boxes set to checked, first box: " + done.get(0));
+
+
         checkBox.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 CheckBox check = (CheckBox) v;
+                // checkboxes was checked or unchecked, update "done" accordingly
                 done.set(position,check.isChecked() ? "true" : "false");
                 notifyDataSetChanged();
             }
@@ -64,11 +67,13 @@ public class CustomArrayAdapter extends ArrayAdapter<String> {
             @Override
             public void onClick(View v)
             {
+                // remove the item completely from BOTH values and done
                 values.remove(position);
                 done.remove(position);
                 notifyDataSetChanged();
             }
         });
+
         textView.setOnLongClickListener(new View.OnLongClickListener(){
             @Override
             public boolean onLongClick(View v)
