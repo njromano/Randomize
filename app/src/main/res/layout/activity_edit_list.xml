@@ -1,9 +1,7 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools" android:layout_width="match_parent"
-    android:layout_height="match_parent" android:paddingLeft="@dimen/activity_horizontal_margin"
-    android:paddingRight="@dimen/activity_horizontal_margin"
-    android:paddingTop="@dimen/activity_vertical_margin"
-    android:paddingBottom="@dimen/activity_vertical_margin"
+    android:layout_height="match_parent"
+
     tools:context="com.example.nick.randomize.EditList">
 
     <!-- title and editing -->
@@ -13,7 +11,11 @@
         android:layout_height="wrap_content"
         android:layout_centerVertical="true"
         android:layout_alignParentTop="true"
-        android:orientation="horizontal">
+        android:orientation="horizontal"
+        android:layout_marginLeft="@dimen/activity_horizontal_margin"
+        android:layout_marginRight="@dimen/activity_horizontal_margin"
+        android:layout_marginTop="@dimen/activity_vertical_margin"
+        style="@style/ListStyle">
 
         <TextView
             android:id="@+id/listTitle"
@@ -50,7 +52,10 @@
         android:layout_above="@+id/newitem"
         android:layout_below="@id/titleBox"
         android:transcriptMode="alwaysScroll"
-        android:stackFromBottom="false" />
+        android:stackFromBottom="false"
+        android:layout_marginLeft="@dimen/activity_horizontal_margin"
+        android:layout_marginRight="@dimen/activity_horizontal_margin"
+        android:isScrollContainer="false"/>
 
 
     <!-- add item -->
@@ -59,7 +64,12 @@
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
-        android:orientation="horizontal">
+        android:orientation="horizontal"
+        android:background="@color/background_material_light"
+        android:paddingTop="8dp"
+        android:paddingLeft="@dimen/activity_horizontal_margin"
+        android:paddingRight="@dimen/activity_horizontal_margin"
+        android:paddingBottom="8dp">
 
         <EditText
             android:id="@+id/newitemtext"
