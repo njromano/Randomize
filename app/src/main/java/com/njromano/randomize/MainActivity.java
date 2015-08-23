@@ -8,6 +8,7 @@ import android.media.Image;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
+import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -43,6 +44,23 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        listView = (ListView) findViewById(R.id.listview);
+        View titleBox = LayoutInflater.from(getApplicationContext())
+                .inflate(R.layout.title_box_main,listView,false);
+        listView.addHeaderView(titleBox);
+
+        listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, final View view,
+                                    int position, long id) {
+                // when item in list is clicked:
+                Intent intent = new Intent(getApplicationContext(), RandomizeActivity.class);
+                intent.putExtra(EXTRA_CHOSEN, position); // position in array
+                intent.putExtra(EXTRA_LISTS, arrayList); // all RandomizeLists in array
+                startActivity(intent); // send to RandomizeActivity for randomization
+            }
+        });
     }
 
     @Override
@@ -63,33 +81,16 @@ public class MainActivity extends AppCompatActivity {
         }
 
         // check if the loaded lists is empty. if so, notify the user to make a new list
-        View titleBox = (View) findViewById(R.id.titleBox);
         if (arrayList.isEmpty()) {
-            titleBox.setVisibility(View.GONE);
             Toast.makeText(getApplicationContext(),
                     "Press the add button to add a list.",
                     Toast.LENGTH_SHORT).show();
         }
-        else {
-            titleBox.setVisibility(View.VISIBLE);
-        }
 
         // set us up the UI
-        listView = (ListView) findViewById(R.id.listview);
         adapter = new CustomArrayAdapterMain(this, arrayList);
-        adapter.notifyDataSetChanged(); // not entirely sure why this is here
         listView.setAdapter(adapter);
-        listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> parent, final View view,
-                                    int position, long id) {
-                // when item in list is clicked:
-                Intent intent = new Intent(getApplicationContext(), RandomizeActivity.class);
-                intent.putExtra(EXTRA_CHOSEN, position); // position in array
-                intent.putExtra(EXTRA_LISTS, arrayList); // all RandomizeLists in array
-                startActivity(intent); // send to RandomizeActivity for randomization
-            }
-        });
+
     }
 
     @Override
