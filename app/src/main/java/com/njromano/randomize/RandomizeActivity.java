@@ -49,7 +49,7 @@ public class RandomizeActivity extends ActionBarActivity {
             float delta = mAccelCurrent - mAccelLast;
             mAccel = mAccel * 0.9f + delta; // perform low-cut filter
 
-            if (mAccel > 6)
+            if (mAccel > 12)
             {
                 findNextItem();
                 Vibrator v = (Vibrator) getApplicationContext()

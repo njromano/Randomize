@@ -2,60 +2,22 @@
     xmlns:tools="http://schemas.android.com/tools" android:layout_width="match_parent"
     android:layout_height="match_parent"
 
-    tools:context="com.njromano.randomize.EditList">
-
-    <!-- title and editing -->
-    <RelativeLayout
-        android:id="@+id/titleBox"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_centerVertical="true"
-        android:layout_alignParentTop="true"
-        android:orientation="horizontal"
-        android:layout_marginLeft="@dimen/activity_horizontal_margin"
-        android:layout_marginRight="@dimen/activity_horizontal_margin"
-        android:layout_marginTop="@dimen/activity_vertical_margin"
-        style="@style/ListStyle">
-
-        <TextView
-            android:id="@+id/listTitle"
-            android:layout_width="fill_parent"
-            android:layout_height="wrap_content"
-            android:paddingLeft="8dp"
-            android:paddingTop="10dp"
-            android:paddingBottom="10dp"
-            android:layout_toLeftOf="@+id/titleEdit"
-            android:textSize="25sp"
-            />
-
-        <ImageButton
-            android:id="@+id/titleEdit"
-            android:src="@drawable/ic_mode_edit_black_24dp"
-            android:contentDescription="@string/edit_title_text"
-            android:background="@android:color/transparent"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignParentRight="true"
-            android:layout_alignParentEnd="true"
-            android:layout_centerVertical="true"
-            android:paddingTop="10dp"
-            android:paddingBottom="10dp"
-            android:layout_marginRight="5dp"
-            android:layout_marginEnd="5dp"/>
-
-    </RelativeLayout>
+    tools:context="com.njromano.randomize.EditList"
+    android:layout_marginTop="12dp"
+    >
 
     <!-- the list -->
     <ListView xmlns:android="http://schemas.android.com/apk/res/android"
         android:id="@+id/listeditview"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_above="@+id/newitem"
-        android:layout_below="@id/titleBox"
+        android:layout_alignParentTop="true"
         android:transcriptMode="alwaysScroll"
         android:stackFromBottom="false"
+        android:layout_marginTop="0dp"
         android:layout_marginLeft="@dimen/activity_horizontal_margin"
         android:layout_marginRight="@dimen/activity_horizontal_margin"
+        android:layout_marginBottom="66dp"
         android:isScrollContainer="false"/>
 
 
@@ -68,8 +30,6 @@
         android:orientation="horizontal"
         android:background="@color/background_material_light"
         android:paddingTop="8dp"
-        android:paddingLeft="@dimen/activity_horizontal_margin"
-        android:paddingRight="@dimen/activity_horizontal_margin"
         android:paddingBottom="8dp">
 
         <EditText
@@ -85,7 +45,8 @@
             android:layout_height="wrap_content"
             android:layout_weight="0"
             android:text="@string/new_item_save"
-            android:onClick="addItem"/>
+            android:onClick="addItem"
+            />
 
     </LinearLayout>
 

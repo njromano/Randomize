@@ -3,17 +3,23 @@ package com.njromano.randomize;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.inputmethodservice.InputMethodService;
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.WindowManager;
+import android.view.inputmethod.InputMethod;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.ArrayAdapter;
 import android.widget.EditText;
 import android.widget.ImageButton;
+import android.widget.LinearLayout;
 import android.widget.ListView;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -63,6 +69,19 @@ public class EditList extends ActionBarActivity {
         Log.d("EditList", "Done list dump: \n" + debug);
         */
 
+
+        ListView listView = (ListView) findViewById(R.id.listeditview);
+
+        // add header to listView
+        View titleBox = LayoutInflater.from(getApplicationContext())
+                .inflate(R.layout.title_box,listView,false);
+        listView.addHeaderView(titleBox);
+
+        // set up CustomArrayAdapter to capture the array
+        editAdapter = new CustomArrayAdapter(this, chosenList.listItems, chosenList.itemsDone);
+        listView.setAdapter(editAdapter);
+
+
         // set us up the UI
         TextView titleText = (TextView) this.findViewById(R.id.listTitle);
         titleText.setText(chosenList.title);
@@ -84,11 +103,25 @@ public class EditList extends ActionBarActivity {
             }
         });
 
-        ListView listView = (ListView) findViewById(R.id.listeditview);
-
-        // set up CustomArrayAdapter to capture the array
-        editAdapter = new CustomArrayAdapter(this, chosenList.listItems, chosenList.itemsDone);
-        listView.setAdapter(editAdapter);
+        // handle keyboard events to show/hide the title when adding items
+        /*
+        EditText newItemText = (EditText) findViewById(R.id.newitemtext);
+        newItemText.setOnFocusChangeListener(new View.OnFocusChangeListener() {
+            @Override
+            public void onFocusChange(View v, boolean hasFocus) {
+                InputMethodManager imm = (InputMethodManager) getSystemService(INPUT_METHOD_SERVICE);
+                View titleBox = findViewById(R.id.titleBox);
+                if (hasFocus && imm.isActive())
+                {
+                    titleBox.setVisibility(View.GONE);
+                }
+                else if (titleBox.getVisibility() == View.GONE)
+                {
+                    titleBox.setVisibility(View.VISIBLE);
+                }
+            }
+        });
+        */
     }
 
     @Override
@@ -161,6 +194,13 @@ public class EditList extends ActionBarActivity {
 
         // clear the text in the view
         newItem.setText("");
+
+        /*
+        InputMethodManager imm = (InputMethodManager) getSystemService(INPUT_METHOD_SERVICE);
+        imm.hideSoftInputFromWindow(newItem.getWindowToken(), InputMethodManager.HIDE_NOT_ALWAYS);
+        newItem.clearFocus();
+        */
+
     }
 
     // show dialog for editing the title of the list
