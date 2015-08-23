@@ -1,4 +1,4 @@
-package com.njromano.randomize;
+package com.njromano.choosr;
 
 import android.os.Parcel;
 import android.os.Parcelable;

@@ -1,8 +1,8 @@
 <resources>
     <!-- titles and overarching strings -->
-    <string name="app_name">Randomize</string>
+    <string name="app_name">Choosr</string>
     <string name="title_activity_edit_list">List View</string>
-    <string name="title_activity_randomize">Randomize</string>
+    <string name="title_activity_randomize">Choosr</string>
 
     <!-- button descriptors and such -->
     <string name="action_new">New List</string>
@@ -20,9 +20,8 @@
     <string name="new_item_hint">New item...</string>
     <string name="done_button">Done</string>
     <string name="random_default">Tap or Shake to Randomize</string>
-    <string name="about_text">
-        Randomize\nv0.8 (Alpha)\n\nAssembled by Nick Romano\nSend any bugs or suggestions to:\nnjromano86@gmail.com
-    </string>
+    <string name="about_version">Choosr\nv0.85 (Alpha)</string>
+    <string name="about_text">Assembled by Nick Romano\nSend any bugs or suggestions to\nnjromano86@gmail.com</string>
     <string name="save_list">Save List</string>
     <string name="list_delete">Delete List</string>
     <string name="item_delete">Delete Item</string>

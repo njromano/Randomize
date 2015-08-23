@@ -1,4 +1,4 @@
-package com.njromano.randomize;
+package com.njromano.choosr;
 
 import android.app.AlertDialog;
 import android.content.Context;
@@ -15,8 +15,6 @@ import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.TextView;
-
-import com.njromano.randomize.R;
 
 import java.util.ArrayList;
 

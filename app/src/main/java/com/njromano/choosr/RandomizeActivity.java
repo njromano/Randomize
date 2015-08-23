@@ -1,4 +1,4 @@
-package com.njromano.randomize;
+package com.njromano.choosr;
 
 import android.app.AlertDialog;
 import android.content.Context;
@@ -10,10 +10,8 @@ import android.hardware.SensorEvent;
 import android.hardware.SensorEventListener;
 import android.hardware.SensorManager;
 import android.os.Vibrator;
-import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -21,8 +19,6 @@ import android.widget.Button;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
-
-import com.njromano.randomize.R;
 
 import java.util.ArrayList;
 

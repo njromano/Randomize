@@ -1,4 +1,4 @@
-package com.njromano.randomize;
+package com.njromano.choosr;
 
 import android.content.Context;
 import android.content.Intent;
@@ -8,8 +8,6 @@ import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.ImageButton;
 import android.widget.TextView;
-
-import com.njromano.randomize.R;
 
 import java.util.ArrayList;
 
