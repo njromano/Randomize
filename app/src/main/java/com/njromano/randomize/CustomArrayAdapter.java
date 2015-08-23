@@ -27,6 +27,7 @@ public class CustomArrayAdapter extends ArrayAdapter<String> {
     private final Context context;
     private final ArrayList<String> values;
     private final ArrayList<String> done;
+    public boolean dataChanged;
 
     public CustomArrayAdapter(Context context, ArrayList<String> values, ArrayList<String> done)
     {
@@ -63,6 +64,7 @@ public class CustomArrayAdapter extends ArrayAdapter<String> {
                 // checkboxes was checked or unchecked, update "done" accordingly
                 done.set(position,check.isChecked() ? "true" : "false");
                 notifyDataSetChanged();
+                dataChanged = true;
             }
         });
 
@@ -74,6 +76,7 @@ public class CustomArrayAdapter extends ArrayAdapter<String> {
                 values.remove(position);
                 done.remove(position);
                 notifyDataSetChanged();
+                dataChanged = true;
             }
         });
 
@@ -94,6 +97,7 @@ public class CustomArrayAdapter extends ArrayAdapter<String> {
 
                         values.set(position, edittext.getText().toString());
                         notifyDataSetChanged();
+                        dataChanged = true;
                     }
                 });
 

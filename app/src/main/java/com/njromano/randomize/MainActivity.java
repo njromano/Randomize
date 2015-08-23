@@ -49,6 +49,7 @@ public class MainActivity extends AppCompatActivity {
         View titleBox = LayoutInflater.from(getApplicationContext())
                 .inflate(R.layout.title_box_main,listView,false);
         listView.addHeaderView(titleBox);
+        listView.setEmptyView(findViewById(R.id.emptyText));
 
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override

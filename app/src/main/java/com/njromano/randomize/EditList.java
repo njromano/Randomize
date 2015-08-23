@@ -34,13 +34,16 @@ public class EditList extends ActionBarActivity {
     private ArrayList<RandomizeList> arrayList;
     private RandomizeList chosenList;
     private int chosenIndex;
-    private ArrayAdapter editAdapter;
+    private CustomArrayAdapter editAdapter;
+    private boolean dataChanged;
+    private int backPressed;
 
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_edit_list);
+        dataChanged = false;
 
         // fetch intent from MainActivity
         try {
@@ -90,6 +93,7 @@ public class EditList extends ActionBarActivity {
             public boolean onLongClick(View v) {
                 showEditTitleDialog();
                 editAdapter.notifyDataSetChanged();
+                dataChanged = true;
                 return true;
             }
         });
@@ -122,6 +126,15 @@ public class EditList extends ActionBarActivity {
             }
         });
         */
+    }
+
+    @Override
+    public void onBackPressed()
+    {
+        if (dataChanged || editAdapter.dataChanged)
+            showBackConfirmationDialog();
+        else
+            super.onBackPressed();
     }
 
     @Override
@@ -174,6 +187,9 @@ public class EditList extends ActionBarActivity {
     // respond to new item saved
     public void addItem(View view)
     {
+        // let the activity know something has changed
+        dataChanged = true;
+
         // grab the text for that item
         EditText newItem = (EditText) findViewById(R.id.newitemtext);
         // sanitize it
@@ -223,6 +239,7 @@ public class EditList extends ActionBarActivity {
                     chosenList.title = edittext.getText().toString();
                     TextView titleText = (TextView) findViewById(R.id.listTitle);
                     titleText.setText(chosenList.title);
+                    dataChanged = true;
                 } else {
                     // notify that the user is a bad user. BAD!
                     Toast.makeText(getApplicationContext(),
@@ -277,6 +294,33 @@ public class EditList extends ActionBarActivity {
                 Intent intent = new Intent(getApplicationContext(), MainActivity.class);
                 arrayList.remove(chosenIndex);
                 intent.putParcelableArrayListExtra(EXTRA_SAVED, arrayList);
+                intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
+                startActivity(intent);
+                dataChanged = true;
+                finish();
+            }
+        });
+
+        builder.setNegativeButton("No", new DialogInterface.OnClickListener() {
+            public void onClick(DialogInterface dialog, int whichButton) {
+                dialog.cancel();
+            }
+        });
+
+        final AlertDialog alert = builder.create();
+
+        alert.show();
+    }
+
+    private void showBackConfirmationDialog() {
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setTitle("");
+        builder.setMessage("Discard changes?");
+        builder.setCancelable(false);
+
+        builder.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+            public void onClick(DialogInterface dialog, int whichButton) {
+                Intent intent = new Intent(getApplicationContext(), MainActivity.class);
                 intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
                 startActivity(intent);
                 finish();
