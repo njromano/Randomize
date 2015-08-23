@@ -6,6 +6,7 @@ import android.content.Intent;
 import android.inputmethodservice.InputMethodService;
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
+import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -27,7 +28,7 @@ import com.njromano.randomize.R;
 
 import java.util.ArrayList;
 
-public class EditList extends ActionBarActivity {
+public class EditList extends AppCompatActivity {
     // key for parcel passing
     public final static String EXTRA_SAVED = "com.example.nick.Randomize.SAVED";
     // ArrayList of all lists
@@ -44,6 +45,7 @@ public class EditList extends ActionBarActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_edit_list);
         dataChanged = false;
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
         // fetch intent from MainActivity
         try {
@@ -93,7 +95,6 @@ public class EditList extends ActionBarActivity {
             public boolean onLongClick(View v) {
                 showEditTitleDialog();
                 editAdapter.notifyDataSetChanged();
-                dataChanged = true;
                 return true;
             }
         });
@@ -180,8 +181,16 @@ public class EditList extends ActionBarActivity {
             showDeleteConfirmationDialog();
             return true;
         }
+        else if (id == android.R.id.home)
+        {
+            onBackPressed();
+        }
+        else
+        {
+            return super.onOptionsItemSelected(item);
+        }
 
-        return super.onOptionsItemSelected(item);
+        return true;
     }
 
     // respond to new item saved

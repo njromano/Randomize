@@ -1,6 +1,8 @@
 package com.njromano.randomize;
 
+import android.app.AlertDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Paint;
 import android.hardware.Sensor;
@@ -10,6 +12,7 @@ import android.hardware.SensorManager;
 import android.os.Vibrator;
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
+import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -24,7 +27,7 @@ import com.njromano.randomize.R;
 import java.util.ArrayList;
 
 
-public class RandomizeActivity extends ActionBarActivity {
+public class RandomizeActivity extends AppCompatActivity {
     // key for passing parcels
     public final static String EXTRA_SAVED = "com.example.nick.Randomize.SAVED";
     private ArrayList<RandomizeList> arrayList;
@@ -32,6 +35,7 @@ public class RandomizeActivity extends ActionBarActivity {
     private int chosenIndex;
     private int chosenRandom; // random number that gets generated
     private int randCount; // number of times we have generated a result
+    private boolean dataChanged;
 
     private SensorManager mSensorManager;
     private float mAccel; // acceleration apart from gravity
@@ -67,6 +71,7 @@ public class RandomizeActivity extends ActionBarActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_randomize);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
         // get list from Intent
         try {
@@ -119,6 +124,7 @@ public class RandomizeActivity extends ActionBarActivity {
                 chosenList.itemsDone.set(chosenRandom, "true");
                 // clearly show that the items is now marked "done"
                 textView.setPaintFlags(textView.getPaintFlags() | Paint.STRIKE_THRU_TEXT_FLAG);
+                dataChanged = true;
                 Toast.makeText(getApplicationContext(),
                         "Item marked \"Done\" in your list.", Toast.LENGTH_SHORT).show();
             }
@@ -131,6 +137,15 @@ public class RandomizeActivity extends ActionBarActivity {
         mAccel = 0.00f;
         mAccelCurrent = SensorManager.GRAVITY_EARTH;
         mAccelLast = SensorManager.GRAVITY_EARTH;
+    }
+
+    @Override
+    public void onBackPressed()
+    {
+        if (dataChanged)
+            showBackConfirmationDialog();
+        else
+            super.onBackPressed();
     }
 
     @Override
@@ -171,8 +186,16 @@ public class RandomizeActivity extends ActionBarActivity {
             startActivity(intent);
             finish();
         }
+        else if (id == android.R.id.home)
+        {
+            onBackPressed();
+        }
+        else
+        {
+            return super.onOptionsItemSelected(item);
+        }
 
-        return super.onOptionsItemSelected(item);
+        return true;
     }
 
     public void findNextItem()
@@ -208,9 +231,35 @@ public class RandomizeActivity extends ActionBarActivity {
         }
         else
         {
-            textView.setText("All done. Don't forget to save!");
+            textView.setText("All done!");
             // make the button go away
             doneButton.setVisibility(View.GONE);
         }
+    }
+
+    private void showBackConfirmationDialog() {
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setTitle("");
+        builder.setMessage("You have unsaved marked items. Are you sure you want to discard them?");
+        builder.setCancelable(false);
+
+        builder.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+            public void onClick(DialogInterface dialog, int whichButton) {
+                Intent intent = new Intent(getApplicationContext(), MainActivity.class);
+                intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
+                startActivity(intent);
+                finish();
+            }
+        });
+
+        builder.setNegativeButton("No", new DialogInterface.OnClickListener() {
+            public void onClick(DialogInterface dialog, int whichButton) {
+                dialog.cancel();
+            }
+        });
+
+        final AlertDialog alert = builder.create();
+
+        alert.show();
     }
 }
