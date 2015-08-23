@@ -79,6 +79,8 @@ public class MainActivity extends AppCompatActivity {
 
             // save it
             saveLists(arrayList);
+
+            Toast.makeText(this,"Changes saved.", Toast.LENGTH_SHORT).show();
         }
 
         // check if the loaded lists is empty. if so, notify the user to make a new list
@@ -161,7 +163,6 @@ public class MainActivity extends AppCompatActivity {
             oos.writeObject(lists);
 
             oos.close();
-            Log.i("MainActivity", "Lists saved.\n");
         } catch (Exception e) {
             e.printStackTrace();
         }
