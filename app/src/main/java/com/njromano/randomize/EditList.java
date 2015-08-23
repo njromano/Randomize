@@ -223,9 +223,7 @@ public class EditList extends ActionBarActivity {
                     chosenList.title = edittext.getText().toString();
                     TextView titleText = (TextView) findViewById(R.id.listTitle);
                     titleText.setText(chosenList.title);
-                }
-                else
-                {
+                } else {
                     // notify that the user is a bad user. BAD!
                     Toast.makeText(getApplicationContext(),
                             "Bad or missing title. Please try again.", Toast.LENGTH_SHORT)
@@ -237,6 +235,15 @@ public class EditList extends ActionBarActivity {
         builder.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
             public void onClick(DialogInterface dialog, int whichButton) {
                 dialog.cancel();
+            }
+        });
+
+        builder.setOnDismissListener(new DialogInterface.OnDismissListener() {
+            @Override
+            public void onDismiss(DialogInterface dialog) {
+                InputMethodManager imm = (InputMethodManager)getSystemService(INPUT_METHOD_SERVICE);
+                imm.hideSoftInputFromWindow(edittext.getWindowToken(),
+                        InputMethodManager.HIDE_NOT_ALWAYS);
             }
         });
 
