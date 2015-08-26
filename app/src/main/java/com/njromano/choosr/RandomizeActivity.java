@@ -96,7 +96,7 @@ public class RandomizeActivity extends AppCompatActivity {
         */
 
         // set activity title
-        setTitle("Item Randomizer - " + chosenList.title);
+        //setTitle("Item Randomizer - " + chosenList.title);
 
         // set us up the UI
 
