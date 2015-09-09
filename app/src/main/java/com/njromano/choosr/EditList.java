@@ -158,6 +158,7 @@ public class EditList extends AppCompatActivity {
             intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
             // vamanos
             startActivity(intent);
+            Toast.makeText(this,"Changes saved.", Toast.LENGTH_SHORT).show();
             finish();
             return true;
         } else if (id == R.id.action_save && chosenList.listItems.isEmpty()){

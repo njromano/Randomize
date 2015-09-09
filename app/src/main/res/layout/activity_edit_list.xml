@@ -3,7 +3,6 @@
     android:layout_height="match_parent"
 
     tools:context="com.njromano.choosr.EditList"
-    android:layout_marginTop="12dp"
     >
 
     <!-- the list -->
@@ -30,7 +29,9 @@
         android:orientation="horizontal"
         android:background="@color/background_material_light"
         android:paddingTop="8dp"
-        android:paddingBottom="8dp">
+        android:paddingBottom="8dp"
+        android:paddingLeft="16dp"
+        android:paddingRight="16dp">
 
         <EditText
             android:id="@+id/newitemtext"

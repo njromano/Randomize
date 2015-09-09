@@ -180,6 +180,7 @@ public class RandomizeActivity extends AppCompatActivity {
             intent.putParcelableArrayListExtra(EXTRA_SAVED, arrayList);
             intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
             startActivity(intent);
+            Toast.makeText(this,"Changes saved.", Toast.LENGTH_SHORT).show();
             finish();
         }
         else if (id == android.R.id.home)
