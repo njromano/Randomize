@@ -5,10 +5,10 @@ android {
     buildToolsVersion "22.0.1"
     defaultConfig {
         applicationId 'com.njromano.choosr'
-        minSdkVersion 11
+        minSdkVersion 22
         targetSdkVersion 22
-        versionCode 3
-        versionName "0.86"
+        versionCode 4
+        versionName "0.1"
     }
     buildTypes {
         release {
