@@ -223,8 +223,8 @@ public class EditList extends AppCompatActivity {
     public void showEditTitleDialog() {
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
         final EditText edittext = new EditText(this);
-        builder.setTitle("");
-        builder.setMessage("Edit your title:");
+        builder.setTitle("Edit Title");
+        builder.setMessage("Enter the new list title.");
         edittext.setText(chosenList.title);
 
         // make sure we select all the text inside the edittext view when we get here

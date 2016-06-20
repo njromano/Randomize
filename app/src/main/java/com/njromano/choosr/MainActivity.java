@@ -167,11 +167,12 @@ public class MainActivity extends AppCompatActivity {
 
 
         final EditText edittext = new EditText(this);
-        builder.setTitle("");
-        builder.setMessage("Enter your title:");
-        edittext.setHint("Your title here...");
+        builder.setTitle("New List");
+        builder.setMessage("Please name your new list.");
+        //edittext.setHint("List title here...");
 
-        builder.setPositiveButton("Create List", new DialogInterface.OnClickListener() {
+
+        builder.setPositiveButton("Okay", new DialogInterface.OnClickListener() {
             public void onClick(DialogInterface dialog, int whichButton) {
                 // sanitizing input
                 String sanit = edittext.getText().toString().trim();

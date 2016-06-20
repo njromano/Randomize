@@ -19,9 +19,12 @@
         android:id="@+id/itemRandomize"
         android:src="@drawable/ic_shuffle_black_48dp"
         android:background="@android:color/transparent"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_width="36dp"
+        android:layout_height="36dp"
         android:layout_alignParentRight="true"
-        android:layout_centerVertical="true" />
+        android:layout_centerVertical="true"
+        android:scaleType="fitCenter"
+        android:layout_marginTop="8dp"
+        android:layout_marginBottom="8dp" />
 
 </RelativeLayout>

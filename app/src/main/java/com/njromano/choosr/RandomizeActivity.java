@@ -49,7 +49,7 @@ public class RandomizeActivity extends AppCompatActivity {
             float delta = mAccelCurrent - mAccelLast;
             mAccel = mAccel * 0.9f + delta; // perform low-cut filter
 
-            if (mAccel > 12)
+            if (mAccel > 12) // TODO settings for accelerometer sensitivity
             {
                 findNextItem();
                 Vibrator v = (Vibrator) getApplicationContext()
@@ -76,6 +76,8 @@ public class RandomizeActivity extends AppCompatActivity {
             chosenIndex = intent.getIntExtra(MainActivity.EXTRA_CHOSEN, 0);
             if (arrayList != null) {
                 chosenList = arrayList.get(chosenIndex);
+                TextView randomText = (TextView) findViewById(R.id.randomText);
+                randomText.setText(randomText.getText() + " From " + chosenList.title);
             } else {
                 throw new Exception("Null list array passed to RandomizeActivity");
             }
