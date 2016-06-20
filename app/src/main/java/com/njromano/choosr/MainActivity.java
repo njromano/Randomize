@@ -104,14 +104,16 @@ public class MainActivity extends AppCompatActivity {
         int id = item.getItemId();
 
         //noinspection SimplifiableIfStatement
-        if (id == R.id.action_about) {
+        if (id == R.id.action_about)
+        {
             showAboutDialog();
             return true;
-        } else if (id == R.id.action_new) { // user wants a new list
+        }
+        else if (id == R.id.action_new)
+        { // user wants a new list
             showNewListDialog();
             return true;
         }
-
 
         return super.onOptionsItemSelected(item);
     }

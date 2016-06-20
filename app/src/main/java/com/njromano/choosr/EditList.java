@@ -287,7 +287,7 @@ public class EditList extends AppCompatActivity {
     {
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
         builder.setTitle("");
-        builder.setMessage("Are you sure you want to delete?");
+        builder.setMessage("Are you sure you want to delete this list?");
 
         builder.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
             public void onClick(DialogInterface dialog, int whichButton) {

@@ -85,12 +85,12 @@ public class CustomArrayAdapter extends ArrayAdapter<String> {
                 AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
 
                 final EditText edittext = new EditText(getContext());
-                builder.setTitle("");
-                builder.setMessage("Edit your item:");
+                builder.setTitle("Edit Item");
+                builder.setMessage("Edit the list item.");
                 edittext.setText(values.get(position));
                 edittext.setSelectAllOnFocus(true);
 
-                builder.setPositiveButton("Save Item", new DialogInterface.OnClickListener() {
+                builder.setPositiveButton("Save", new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int whichButton) {
 
                         values.set(position, edittext.getText().toString());

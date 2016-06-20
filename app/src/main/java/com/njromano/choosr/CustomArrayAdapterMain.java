@@ -34,7 +34,7 @@ public class CustomArrayAdapterMain extends ArrayAdapter<RandomizeList> {
         TextView textView = (TextView) rowView.findViewById(R.id.itemTitle);
         ImageButton randomizeButton = (ImageButton) rowView.findViewById(R.id.itemRandomize);
 
-        textView.setOnClickListener(new View.OnClickListener(){
+        rowView.setOnClickListener(new View.OnClickListener(){
             @Override
             public void onClick(View v)
             {
